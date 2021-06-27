@@ -13,7 +13,7 @@
 #include "spawn.h"
 
 #include "HPUIManager.h"
-#include "../EditorUI/HPEditorViewController.h"
+#include "HomePlusEditor/EditorUI/MainEditorView/HPEditorViewController.h"
 #include "../Utility/HPUtility.h"
 #include "../Utility/HPResources.h"
 #include "../../HomePlus.h"
@@ -41,6 +41,7 @@
 
 @end
 
+static BOOL hasEnabledOnce = NO;
 
 @interface HPUIManager () <HPEditorViewControllerDelegate>
 
@@ -68,6 +69,7 @@
 
     if (self) {
         self.editingLocation = @"SBIconLocationRoot";
+
     }
 
     return self;
@@ -197,6 +199,13 @@
             _editorView.alpha = 1;
         }
     ];
+
+    if (!hasEnabledOnce)
+    {
+        hasEnabledOnce = YES;
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideEditorView) name:@"SBCoverSheetWillPresentNotification" object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideEditorView) name:@"SBUIAppSwitcherWillRevealNotification" object:nil];
+    }
 }
 - (void)hideEditorView
 {

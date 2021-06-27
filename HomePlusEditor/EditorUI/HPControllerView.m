@@ -19,10 +19,18 @@
 #include "../Utility/HPResources.h"
 #include "HPUIManager.h"
 #include "HPControllerView.h"
+#import "HPLayoutManager.h"
+#import "HPUtility.h"
 #include <AudioToolbox/AudioToolbox.h>
 
 
-@implementation HPControllerView 
+@implementation HPControllerView
+{
+@private
+    HPControllerViewConfiguration _config;
+}
+
+@synthesize config = _config;
 
 /*
 Properties: 
@@ -38,12 +46,14 @@ Properties:
     @property (nonatomic, retain) UITextField *bottomTextField;
 */
 
-- (instancetype)initWithFrame:(CGRect)frame
+- (instancetype)initWithFrame:(CGRect)frame config:(HPControllerViewConfiguration)config
 {
     self = [super initWithFrame:frame];
 
     if (self) {
-        //[self layoutControllerView];
+        self.config = config;
+        [self layoutControllerView];
+        [self updateLayoutForConfiguration:config];
     }
     return self;
 }
@@ -52,7 +62,6 @@ Properties:
 
 - (void)layoutControllerView
 {
-
     UIView *backer = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, 800)];
     backer.layer.cornerRadius = kDeviceCornerRadius;
     backer.layer.cornerCurve = kCACornerCurveContinuous;
@@ -212,21 +221,167 @@ Properties:
     //[self addSubview:location];
 }
 
+- (void)updateLayoutForConfiguration:(HPControllerViewConfiguration)config
+{
+
+    self.topLabel.text = [HPUtility localizedItem:config.topControl.itemInfo.label];
+    self.bottomLabel.text = [HPUtility localizedItem:config.bottomControl.itemInfo.label];
+
+    self.topLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, (0.0615) * [[UIScreen mainScreen] bounds].size.height);
+    self.bottomLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, 50);
+
+
+    switch (config.topControl.itemType)
+    {
+        case kHPControllerItemTypeNone:
+            _topView.hidden = YES;
+            break;
+        case kHPControllerItemTypeCounter:
+        {
+            self.topLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, (0.0615) * [[UIScreen mainScreen] bounds].size.height);
+            self.topTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+([[UIScreen mainScreen] bounds].size.width / 2) - (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2) - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.048) * [[UIScreen mainScreen] bounds].size.height, (0.1333) * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height);
+            self.topControl.alpha = 0;
+
+            UIButton *topMin = [UIButton buttonWithType:UIButtonTypeCustom];
+
+            [topMin addTarget:self
+                       action:@selector(topMinus)
+             forControlEvents:UIControlEventTouchUpInside];
+            [topMin setTitle:@"-" forState:UIControlStateNormal];
+
+            topMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            [self.topView addSubview:topMin];
+
+            UIButton *topPlu = [UIButton buttonWithType:UIButtonTypeCustom];
+
+            [topPlu addTarget:self
+                       action:@selector(topPlus)
+             forControlEvents:UIControlEventTouchUpInside];
+            [topPlu setTitle:@"+" forState:UIControlStateNormal];
+
+            topPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+
+            [self.topView addSubview:topPlu];
+
+            [topPlu setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.06]];
+            [topMin setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.06]];
+
+            topMin.layer.cornerRadius = 10;
+            topMin.layer.cornerCurve = kCACornerCurveContinuous;
+            topMin.clipsToBounds = YES;
+            topPlu.layer.cornerRadius = 10;
+            topPlu.layer.cornerCurve = kCACornerCurveContinuous;
+            topPlu.clipsToBounds = YES;
+
+            break;
+        }
+        default:
+            break;
+    }
+
+    switch (config.bottomControl.itemType)
+    {
+        case kHPControllerItemTypeNone:
+            _bottomView.hidden = YES;
+            break;
+        case kHPControllerItemTypeCounter:
+        {
+            UIButton *bottomMin = [UIButton buttonWithType:UIButtonTypeCustom];
+
+            [bottomMin addTarget:self
+                          action:@selector(bottomMinus)
+                forControlEvents:UIControlEventTouchUpInside];
+            [bottomMin setTitle:@"-" forState:UIControlStateNormal];
+            bottomMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            [self.bottomView addSubview:bottomMin];
+
+            UIButton *bottomPlu = [UIButton buttonWithType:UIButtonTypeCustom];
+            [bottomPlu addTarget:self
+                          action:@selector(bottomPlus)
+                forControlEvents:UIControlEventTouchUpInside];
+
+            [bottomPlu setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.06]];
+            [bottomMin setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.06]];
+
+            [bottomPlu setTitle:@"+" forState:UIControlStateNormal];
+            bottomPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2), (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+
+            [self.bottomView addSubview:bottomPlu];
+
+            self.bottomControl.alpha = 0;
+
+            bottomPlu.layer.cornerRadius = 10;
+            bottomPlu.layer.cornerCurve = kCACornerCurveContinuous;
+            bottomPlu.clipsToBounds = YES;
+            bottomMin.layer.cornerRadius = 10;
+            bottomMin.layer.cornerCurve = kCACornerCurveContinuous;
+            bottomMin.clipsToBounds = YES;
+
+            self.bottomLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, 50);
+
+            self.bottomTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+[[UIScreen mainScreen] bounds].size.width / 2 -  ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.0480) * [[UIScreen mainScreen] bounds].size.height, 50, 30);
+
+
+            break;
+        }
+        default:
+            break;
+    }
+
+
+    self.topControl.minimumValue = config.topControl.itemInfo.min;
+    self.topControl.maximumValue = config.topControl.itemInfo.max;
+
+    self.bottomControl.minimumValue = config.bottomControl.itemInfo.min;
+    self.bottomControl.maximumValue = config.bottomControl.itemInfo.max;
+
+    NSString *x = [[[HPUIManager sharedInstance] editingLocation] substringFromIndex:14];
+    self.topControl.value = (float) [[[HPDataManager sharedInstance] currentConfiguration] floatForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", x, config.topControl.itemInfo.configKey]];
+    self.topTextField.text = [NSString stringWithFormat:@"%.0f", self.topControl.value];
+    self.bottomControl.value = (float) [[[HPDataManager sharedInstance] currentConfiguration] floatForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", x, config.bottomControl.itemInfo.configKey]];
+    self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", self.bottomControl.value];
+}
+
+- (void)topMinus
+{
+    self.topControl.value -= 1;
+    [self topSliderUpdated:self.topControl];
+}
+
+- (void)topPlus
+{
+    self.topControl.value += 1;
+    [self topSliderUpdated:self.topControl];
+}
+
+- (void)bottomMinus
+{
+    self.bottomControl.value -= 1;
+    [self bottomSliderUpdated:self.bottomControl];
+}
+
+- (void)bottomPlus
+{
+    self.bottomControl.value += 1;
+    [self bottomSliderUpdated:self.bottomControl];
+}
+
 #pragma mark Sliders 
 
 - (void)topSliderUpdated:(UISlider *)slider
 {
-    // Mainly stubs for subclasses. If they need this they can call super (most if not all need it)
-    
-    [HPManager updateCacheForLocation:[[HPUIManager sharedInstance] editingLocation]];
-    [[HPManager sharedInstance] layoutIconViews];
+    [HPLayoutManager updateConfigItem:_config.topControl.itemInfo.configKey
+                          forLocation:[[HPUIManager sharedInstance] editingLocation]
+                            withValue:(NSInteger) slider.value];
+    self.topTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat)((NSInteger)(floor([slider value])))];
 }
 
 - (void)bottomSliderUpdated:(UISlider *)slider
 {
-    
-    [HPManager updateCacheForLocation:[[HPUIManager sharedInstance] editingLocation]];
-    [[HPManager sharedInstance] layoutIconViews];
+    [HPLayoutManager updateConfigItem:_config.bottomControl.itemInfo.configKey
+                          forLocation:[[HPUIManager sharedInstance] editingLocation]
+                            withValue:(NSInteger) slider.value];
+    self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat)((NSInteger)(floor([slider value])))];
 }
 
 #pragma mark Text Fields
@@ -311,12 +466,14 @@ Properties:
 - (void)handleTopResetButtonPress:(UIButton*)sender 
 {
     AudioServicesPlaySystemSound(1519);
-    // method stub for subclasses
+    self.topControl.value = _config.topControl.itemInfo.defaultValue;
+    [self topSliderUpdated:self.topControl];
 }
 - (void)handleBottomResetButtonPress:(UIButton*)sender 
 {
     AudioServicesPlaySystemSound(1519);
-    // method stub for subclasses
+    self.bottomControl.value = _config.bottomControl.itemInfo.defaultValue;
+    [self bottomSliderUpdated:self.bottomControl];
 }
 
 @end

@@ -85,6 +85,13 @@
 
 -(void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
 {
+
+    if (![(SpringBoard*)[UIApplication sharedApplication] isShowingHomescreen])
+    {
+        gestureRecognizer.state = UIGestureRecognizerStateCancelled;
+        return;
+    }
+
     if (gestureRecognizer.scale > self.panAmount && gestureRecognizer==self.activeGestureRecognizer)
         gestureRecognizer.scale = self.panAmount;
 

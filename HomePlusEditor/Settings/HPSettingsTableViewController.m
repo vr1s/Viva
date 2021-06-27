@@ -18,6 +18,7 @@
 #include "../Utility/HPTableCell.h"
 #include "HomePlus.h"
 #include "spawn.h"
+#import "HPLayoutManager.h"
 
 static NSArray *_rtCells;
 
@@ -276,7 +277,7 @@ NSArray *getCells();
 
     [kIconModel layout];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-    [[HPManager sharedInstance] layoutIconViews];
+    [[HPLayoutManager sharedInstance] layoutIconViews];
 }
 
 
@@ -306,7 +307,7 @@ NSArray *getCells();
                                                     [[[HPDataManager sharedInstance] currentConfiguration] writeDefaults];
                                                     [kIconModel layout];
                                                     [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-                                                    [[HPManager sharedInstance] layoutIconViews];
+                                                    [[HPLayoutManager sharedInstance] layoutIconViews];
                                                     [[[HPUIManager sharedInstance] editorViewController] reload];
                                                 }];
 

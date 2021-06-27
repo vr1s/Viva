@@ -10,11 +10,11 @@
 
 #include <UIKit/UIKit.h>
 
-#import "../Utility/OBSlider.h"
+#import "OBSlider.h"
 #import "HPControllerView.h"
-#include "../Extensions/HPExtensionControllerView.h"
-#include "../Extensions/HPExtension.h"
-#import "../Settings/HPSettingsTableViewController.h"
+#include "HPExtensionControllerView.h"
+#include "HPExtension.h"
+#import "HPSettingsTableViewController.h"
 #import "HPEditorViewNavigationTabBar.h"
 
 

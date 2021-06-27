@@ -85,7 +85,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -107,7 +107,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -127,7 +127,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -150,7 +150,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -171,7 +171,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -193,7 +193,7 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"HorizontalSpacing"]];
     [self setFloat:0.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"VerticalSpacing"]];
-    [self setFloat:60.0f
+    [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"Scale"]];
     [self setFloat:100.0f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
@@ -218,11 +218,15 @@
 
 - (id)valueForKey:(NSString *)key
 {
+    if (!self.values[key])
+        NSLog(@"HomePlus: No value for %@", key);
     return (self.values[key] ?: [NSNumber numberWithFloat:0.0f]);
 }
 
 - (id)objectForKey:(NSString *)key
 {
+    if (!self.values[key])
+        NSLog(@"HomePlus: No value for %@", key);
     return (self.values[key] ?: nil);
 }
 

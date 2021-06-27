@@ -11,8 +11,8 @@
 //
 #include <UIKit/UIKit.h>
 
-#import "../EditorUI/HPEditorViewController.h"
-#import "../EditorUI/HPEditorWindow.h"
+#import "HomePlusEditor/EditorUI/MainEditorView/HPEditorViewController.h"
+#import "HomePlusEditor/EditorUI/MainEditorView/HPEditorWindow.h"
 
 
 #ifndef HPUIManager_H

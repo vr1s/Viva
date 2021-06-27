@@ -40,6 +40,8 @@
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(kickupStateChanged:) name:kEditorKickViewsUp object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(kickupStateChanged:) name:kEditorKickViewsBack object:nil];
+
+
     }
 
     return self;
