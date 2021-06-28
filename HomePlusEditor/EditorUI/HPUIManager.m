@@ -209,10 +209,13 @@ static BOOL hasEnabledOnce = NO;
 }
 - (void)hideEditorView
 {
+    if (_editorView.hidden == YES)
+        return;
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditingModeDisabledNotificationName object:nil];
     [[HPDataManager sharedInstance].currentConfiguration saveConfigurationToFile];
     [_editorViewController handleDoneSettingsButtonPress:_editorViewController.settingsDoneButton];
     _editorView.hidden = YES;
+    self.editingLocation = @"SBIconLocationRoot";
     [[self editorViewController] unloadExtensionPanes];
     [[self editorViewController] reload];
 }

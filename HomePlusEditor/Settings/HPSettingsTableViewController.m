@@ -328,11 +328,11 @@ NSArray *getCells();
             }
             break;
         }
-        case 1:
+        case 3:
         {
             switch (indexPath.row)
             {
-                case 1:
+                case 0:
                 {
                     [[[HPDataManager sharedInstance] currentConfiguration] saveConfigurationToFile];
                     pid_t pid;
@@ -379,13 +379,38 @@ NSArray *getCells()
             },
             @{
                     @"Cell":@"Section",
-                    @"Title":@"HomePlus",
+                    @"Title":@"HomeScreen",
                     @"Items":@[
                     @{
                             @"Cell":@"Switch",
-                            @"Title":[HPUtility localizedItem:@"APP_SWITCHER_DISABLES_EDITOR"],
-                            @"Key":@"HPDataSwitcherDisables"
+                            @"Title":[HPUtility localizedItem:@"HIDE_ICON_LABELS"],
+                            @"Key":@"HPDataIconLabels"
                     },
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":[HPUtility localizedItem:@"HIDE_BADGES"],
+                            @"Key":@"HPDataIconBadges"
+                    },
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":@"Hide Page Control",
+                            @"Key":@"HPDataRootHidePageControl"
+                    }]
+            },
+            @{
+                    @"Cell":@"Section",
+                    @"Title":@"Dock",
+                    @"Items":@[
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":[HPUtility localizedItem:@"HIDE_DOCK_BG"],
+                            @"Key":@"HPDataDockBG"
+                    }]
+            },
+            @{
+                    @"Cell":@"Section",
+                    @"Title":@"HomePlus",
+                    @"Items":@[
                     @{
                             @"Cell":@"Default",
                             @"Title":[HPUtility localizedItem:@"Respring"],

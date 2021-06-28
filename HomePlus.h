@@ -50,6 +50,16 @@
 
 @interface SBIconListView : UIView
 -(void)layoutIconsNow;
+-(void)setIconsLabelAlpha:(CGFloat)alpha;
+
+-(NSArray *)visibleIcons;
+-(double)horizontalIconPadding;
+@property (assign,getter=isEditing,nonatomic) BOOL editing;
+@property (nonatomic,readonly) SBIconListGridLayout* layout;
+@property (nonatomic, assign) NSUInteger firstFreeSlotIndex;
+@property (nonatomic, assign) NSInteger iconsInRowForSpacingCalculation;
+@property (nonatomic, retain) NSString *iconLocation;
+@property (nonatomic,readonly) CGSize alignmentIconSize;
 @end
 
 @interface SBHLibraryPodFolderController : UIViewController
@@ -84,5 +94,24 @@
 @interface UIRootSceneWindow : UIWindow
 @end
 
+@interface SBRootFolderView : UIView
+@property (nonatomic, retain) SBIconListView *dockListView;
+@property (nonatomic, retain) UIView *dockView;
+@property (nonatomic, assign) BOOL pageControlHidden;
+@end
+
+@interface SBIconView : UIView
+@property (nonatomic, retain) NSString *location;
+@property (nonatomic, assign) CGFloat iconLabelAlpha;
+-(void)configureForLabelAllowed:(BOOL)allowed;
+@end
+@interface SBIcon : NSObject
+@property (nonatomic, assign) NSInteger gridSizeClass;
+@end
+
+
+@interface SBWindow : UIWindow
+-(UIView *)recycledViewsContainer;
+@end
 
 #endif

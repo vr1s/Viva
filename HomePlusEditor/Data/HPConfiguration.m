@@ -91,6 +91,8 @@
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconAlpha"]];
     [self setFloat:13.5f
                     forKey:[NSString stringWithFormat:@"%@%@", prefix, @"IconCorner"]];
+    [self setFloat:0.0f
+            forKey:[NSString stringWithFormat:@"%@%@", prefix, @"PageControlHidden"]];
 
     
     location = @"RootWithSidebar";

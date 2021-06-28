@@ -23,6 +23,8 @@
 -(void)layoutIconViews;
 
 -(void)layoutIconViewsAnimated;
+
+- (void)layoutIndividualIcons;
 @end
 
 #endif //HOMEPLUS_HPLAYOUTMANAGER_H

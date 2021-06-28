@@ -38,7 +38,7 @@
     <real>0.0</real>
     <key>HPDataForceRotation</key>
     <false/>
-    <key>HPDataHideDock</key>
+    <key>HPDataDockBG</key>
     <false/>
     <key>HPDataIconBadges</key>
     <false/>
@@ -47,6 +47,8 @@
     <key>HPDataIconLabelsF</key>
     <false/>
     <key>HPDataModernDock</key>
+    <false/>
+    <key>HPDataRootPageControlHidden</key>
     <false/>
     <key>HPDataRootColumns</key>
     <integer>4</integer>

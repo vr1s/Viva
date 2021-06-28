@@ -159,7 +159,7 @@
                                  if (self.editorActivated)
                                  {
                                      [[HPUIManager sharedInstance] hideEditorView];
-                                     AudioServicesPlaySystemSound(1519);
+                                     //AudioServicesPlaySystemSound(1519);
                                      self.activeGestureRecognizer.enabled = YES;
                                      self.editorActivated = NO;
                                      self.editorOpened = NO;
@@ -224,7 +224,7 @@
             self.panAmount = maxAmt;
 
             self.editorOpened = YES;
-            AudioServicesPlaySystemSound(1519);
+            //AudioServicesPlaySystemSound(1519);
         }
     }
 
