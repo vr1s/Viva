@@ -12,6 +12,7 @@ Any dev can easily add support to their tweak, and no code is required.
 ## Project Layout
 
 HomePlusEditor/ - Non-hook class files for the HomePlus UI, managers, and otherwise
+
 Hooks/ - (guess what type of code is in this folder)
 
 ### ./HomePlusEditor/
