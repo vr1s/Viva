@@ -4,7 +4,6 @@
 
 #include "HPUIManager.h"
 #include "HPManager.h"
-#include "HPDataManager.h"
 #include "HPExtensionManager.h"
 #include "HPUtility.h"
 #pragma mark Dynamic Window Background

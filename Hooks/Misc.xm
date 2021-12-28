@@ -20,7 +20,7 @@
 - (void)layoutSubviews
 {
     %orig;
-
+    /*
     UIView *bgView = MSHookIvar<UIView *>(self, "_backgroundView"); 
 
     if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataDockBG"])
@@ -32,7 +32,7 @@
 {
 bgView.alpha = 1;
 bgView.hidden = NO;
-}
+}*/
 }
 
 %end
@@ -58,6 +58,16 @@ bgView.hidden = NO;
 }
 
 %end
+@interface _SBIconGridWrapperView : UIView
+@end
+%hook _SBIconGridWrapperView
+-(void)layoutSubviews
+{
+    %orig;
+    CGSize size = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconImageInfo.size;
+    self.transform = CGAffineTransformMakeScale(size.width/60, size.height/60);
+}
+%end
 
 # pragma mark Floating Dock Background
 
@@ -66,12 +76,12 @@ bgView.hidden = NO;
 -(void)layoutSubviews
 {
     %orig;
-
+    /*
     if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataHideDockBG"])
     {
         self.backgroundView.alpha = 0;
         self.backgroundView.hidden = YES;
-    }
+    }*/
 }
 
 %end
@@ -93,41 +103,13 @@ bgView.hidden = NO;
 %end
 
 
-%hook SpringBoard
-
-- (NSUInteger)homeScreenRotationStyle
-{
-    BOOL x = [[[HPDataManager sharedInstance] currentConfiguration] objectForKey:@"HPDataForceRotation"]
-                ? [[[HPDataManager sharedInstance] currentConfiguration] boolForKey:@"HPDataForceRotation"]
-                : NO;
-    return x ? 2 : %orig;
-}
-
-- (BOOL)homeScreenSupportsRotation
-{
-    return [[[HPDataManager sharedInstance] currentConfiguration] objectForKey:@"HPDataForceRotation"]
-                ? [[[HPDataManager sharedInstance] currentConfiguration] boolForKey:@"HPDataForceRotation"]
-                : NO;
-}
-
-%end
-
-%hook SBWallpaperController
-
--(BOOL)_isAcceptingOrientationChangesFromSource:(NSInteger)arg
-{
-    return NO;
-}
-
-%end
-
 %hook SBIconView
 
 -(void)configureForLabelAllowed:(BOOL)allowed
 {
     if ([self.location isEqualToString:@"SBIconLocationRoot"])
     {
-        if (GetLoadoutValue(@"", @"IconLabels"))
+        if ([HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels)
         {
             %orig(NO);
             //[self setIconLabelAlpha:0];
@@ -145,7 +127,14 @@ bgView.hidden = NO;
 {
     if ([location isEqualToString:@"SBIconLocationRoot"])
     {
-        if (GetLoadoutValue(@"", @"IconBadges"))
+        if ([HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideBadges)
+        {
+            return NO;
+        }
+    }
+    if ([location isEqualToString:@"SBIconLocationDock"])
+    {
+        if ([HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationDock"].layoutOptions.hideBadges)
         {
             return NO;
         }

@@ -28,9 +28,39 @@
 #include <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
 #include <SpringBoardHome/SBIconListModel.h>
 #include <SpringBoard/SBIconController.h>
-#include <SpringBoardHome/SBRootFolderController.h>
 #include <SpringBoardHome/SBIconListFlowLayout.h>
 #include <SpringBoard/SBIconModel.h>
+
+@interface SBFloatingDockViewController
+@property (nonatomic, assign) CGFloat dockOffscreenProgress;
+@end
+
+@class SBFloatingDockWindow;
+
+@interface SBFloatingDockController
+@property (nonatomic, retain) SBFloatingDockWindow *floatingDockWindow;
+@end
+
+typedef struct SBHIconGridSize {
+	unsigned short columns;
+	unsigned short rows;
+} SBHIconGridSize;
+
+typedef struct SBHIconGridSizeClassSizes {
+	SBHIconGridSize small;
+	SBHIconGridSize medium;
+	SBHIconGridSize large;
+	SBHIconGridSize extralarge;
+} SBHIconGridSizeClassSizes;
+
+
+@interface SBIconListGridLayoutConfiguration (fourteen)
+-(void)setIconGridSizeClassSizes:(SBHIconGridSizeClassSizes)sizes;
+@end
+
+@interface i15SBIconListGridLayoutConfiguration : NSObject
+-(void)setIconGridSizeClassSizes:(SBHIconGridSizeClassSizes *)sizes;
+@end
 
 @interface SpringBoard : UIApplication
 -(BOOL)isShowingHomescreen;
@@ -44,6 +74,7 @@
 
 @interface SBHIconManager : NSObject
 
+@property (nonatomic, retain) SBFloatingDockViewController *floatingDockViewController;
 @property (nonatomic, retain) SBHDefaultIconListLayoutProvider *listLayoutProvider;
 
 @end
@@ -112,6 +143,14 @@
 
 @interface SBWindow : UIWindow
 -(UIView *)recycledViewsContainer;
+@end
+
+@interface SBRootFolderController : NSObject 
+-(NSArray *)iconListViews;
+-(UIView *)contentView;
+@end
+
+@interface SBFloatingDockWindow : UIView
 @end
 
 #endif

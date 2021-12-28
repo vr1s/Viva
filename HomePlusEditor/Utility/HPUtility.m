@@ -12,7 +12,6 @@
 // TODO: could even make a library /shrug
 
 #import "HPUtility.h"
-#include "HPDataManager.h"
 #import <sys/utsname.h>
 #include <sandbox.h>
 #include <dlfcn.h> 
@@ -160,16 +159,6 @@
 
 + (BOOL)deviceRotatable
 {
-    return NO;
-    if ([[[HPDataManager sharedInstance] currentConfiguration] boolForKey:@"HPDataForceRotation"])
-        return YES;
-
-    if ([[HPUtility deviceName] containsString:@"iPad"])
-        return YES;
-    
-    if ([[HPUtility deviceName] containsString:@"Plus"])
-        return YES;
-
     return NO;
 }
 

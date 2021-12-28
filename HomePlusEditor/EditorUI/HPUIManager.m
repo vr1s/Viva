@@ -17,6 +17,7 @@
 #include "../Utility/HPUtility.h"
 #include "../Utility/HPResources.h"
 #include "../../HomePlus.h"
+#import "HPConfigurationManager.h"
 
 @interface HPEditorViewController () 
 
@@ -187,7 +188,6 @@ static BOOL hasEnabledOnce = NO;
 - (void)showEditorView 
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditingModeEnabledNotificationName object:nil];
-    [[HPDataManager sharedInstance].currentConfiguration loadConfigurationFromFile];
     [[[HPUIManager sharedInstance] editorViewController] reload];
     [self editorViewController];
     [self editorView];
@@ -212,7 +212,7 @@ static BOOL hasEnabledOnce = NO;
     if (_editorView.hidden == YES)
         return;
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditingModeDisabledNotificationName object:nil];
-    [[HPDataManager sharedInstance].currentConfiguration saveConfigurationToFile];
+    [HPConfigurationManager.sharedInstance save];
     [_editorViewController handleDoneSettingsButtonPress:_editorViewController.settingsDoneButton];
     _editorView.hidden = YES;
     self.editingLocation = @"SBIconLocationRoot";

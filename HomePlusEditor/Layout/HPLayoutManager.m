@@ -2,10 +2,12 @@
 // Created by Kritanta on 6/27/21.
 //
 
-#import "HPUIManager.h"
+#import "../EditorUI/HPUIManager.h"
 #include "HPManager.h"
 #import "HPLayoutManager.h"
 #include "HomePlus.h"
+#import "HPConfigurationManager.h"
+#import "HPPageConfiguration.h"
 
 #define kListLayoutProvider [[[objc_getClass("SBIconController") sharedInstance] iconManager] listLayoutProvider]
 #define ConfigForLocation(location) [[kListLayoutProvider layoutForIconLocation:location] layoutConfiguration]
@@ -49,63 +51,70 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     return self;
 }
 
-+(void)updateConfigItem:(NSString *)key forLocation:(NSString *)location withValue:(NSInteger)value
++ (void)updateConfigItem:(NSString *)key forLocation:(NSString *)location withValue:(NSInteger)value
 {
-    NSString *loc = [location substringFromIndex:14];
-    [[[HPDataManager sharedInstance] currentConfiguration] setInteger:value
-                                                               forKey:[NSString stringWithFormat:@"HPData%@%@", loc, key]];
+    [[HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][location] setConfigItem:key toValue:value];
     [HPLayoutManager updateCacheForLocation:location];
     [[HPLayoutManager sharedInstance] layoutIconViews];
-    if ([key isEqualToString:@"Scale"])
+    if ([key isEqualToString:@"IconScale"])
     {
         [[HPLayoutManager sharedInstance] layoutIndividualIcons];
     }
 }
 
-+(void)updateCacheForLocation:(NSString *)iconLocation
+static NSMutableDictionary *originalConfigs = nil;
+
++ (SBIconListGridLayoutConfiguration *)defaultConfigurationForIconLocation:(NSString *)iconLocation 
 {
-    // Remove "SBIconLocation" from the iconLocation variable,
-    //      so we just get "Root" or "Dock"
-    NSString *loc = [iconLocation substringFromIndex:14];
-
-    // We're going to use a static dictionary to hold our original configs here, for referencing the 'default' values.
-    static NSMutableDictionary *originalConfigs = nil;
-    SBIconListGridLayoutConfiguration *config = ConfigForLocation(iconLocation);
-
+    if (!ConfigForLocation(iconLocation))
+        return nil;
     if (!originalConfigs)
         originalConfigs = [NSMutableDictionary new];
     if (!originalConfigs[iconLocation])
         // Store a copy, we're going to change the original object.
-        originalConfigs[iconLocation] = [config copy];
+        originalConfigs[iconLocation] = [ConfigForLocation(iconLocation) copy];
+
+    return originalConfigs[iconLocation];
+}
+
++ (void)updateCacheForLocation:(NSString *)iconLocation
+{
+    SBIconListGridLayoutConfiguration *config = ConfigForLocation(iconLocation);
 
     // Set columns and rows here.
-    NSInteger loadoutValueColumns = GetLoadoutValue(loc, @"Columns");
-    [config setNumberOfPortraitColumns:GetLoadoutValue(loc, @"Columns")];
-    [config setNumberOfPortraitRows:GetLoadoutValue(loc, @"Rows")];
+    HPPageConfiguration *pageConfig = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][iconLocation];
+
+    NSInteger loadoutValueColumns = pageConfig.layoutConfiguration.iconGridSize.columns;
+    if (loadoutValueColumns < 1)
+    {
+        // Something went *VERY* wrong with config loading, this should never happen
+        return;
+    }
+    [config setNumberOfPortraitColumns:pageConfig.layoutConfiguration.iconGridSize.columns];
+    [config setNumberOfPortraitRows:pageConfig.layoutConfiguration.iconGridSize.rows];
 
     // This set of code is iOS 14 Widget/Applist specific
     if (@available(iOS 14, *))
     {
         // These defaults may be screwed up. Do check them.
-        SBHIconGridSizeClassSizes sizes = { .small = { .width = (short)widgetWidth(2, loadoutValueColumns), .height = 2 },
-                                    .medium = { .width = (short)widgetWidth(4, loadoutValueColumns), .height = 2 },
-                                    .large = { .width = (short)widgetWidth(4, loadoutValueColumns), .height = 6 },
-                                    .extralarge = { .width = (short)widgetWidth(4, loadoutValueColumns), .height = 6 } };
-        [config setIconGridSizeClassSizes:sizes];
-        // Applist does something weird regarding Root Location columns and grid settings
-        // This appears to fix it. It still looks, off.
-        if ([loc isEqualToString:@"Root"])
-        {
-        }
+        SBHIconGridSizeClassSizes sizes = { .small = { .columns = (short)widgetWidth(2, loadoutValueColumns), .rows = 2 },
+                                    .medium = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 2 },
+                                    .large = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 },
+                                    .extralarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 } };
+
+        if (@available(iOS 15, *))
+            [(i15SBIconListGridLayoutConfiguration *)config setIconGridSizeClassSizes:&sizes];
+        else
+            [config setIconGridSizeClassSizes:sizes];
     }
 
     // set top/bottom/left/right insets (for portrait).
-    UIEdgeInsets originalInsets = [originalConfigs[iconLocation] portraitLayoutInsets];
+    UIEdgeInsets originalInsets = [[HPLayoutManager defaultConfigurationForIconLocation:iconLocation] portraitLayoutInsets];
     UIEdgeInsets calculatedInsets;
 
-    CGFloat calculatedLeftInset = GetLoadoutValue(loc, @"LeftInset")?:0;
-    CGFloat additionalHorizontalSpacing = GetLoadoutValue(loc, @"HorizontalSpacing");
-    CGFloat additionalTopInset = GetLoadoutValue(loc, @"TopInset")?:0;
+    CGFloat calculatedLeftInset = pageConfig.layoutConfiguration.pageInsets.horizontal?:0;
+    CGFloat additionalHorizontalSpacing = pageConfig.layoutConfiguration.pageSpacing.horizontal;
+    CGFloat additionalTopInset = pageConfig.layoutConfiguration.pageInsets.vertical?:0;
 
     if (calculatedLeftInset == 0) // this is homeplus specific left-inset behavior that feels more intuitive
                               // if left-inset is 0, it'll center the icons like it naturally does.
@@ -119,22 +128,27 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
         //     we dont actually give the user 'bottom inset' config, just 'top' and 'vertical spacing'.
         //     increasing vertical spacing increases how far we want to move it "down" from the top inset
         //     so, -2 is what we multiply vertical spacing by
-        originalInsets.bottom - (additionalTopInset) + (GetLoadoutValue(loc, @"VerticalSpacing")?:0) *-2,
-        originalInsets.right - (GetLoadoutValue(loc, @"LeftInset")?:0) + (additionalHorizontalSpacing) *-2
+        originalInsets.bottom - (additionalTopInset) + (pageConfig.layoutConfiguration.pageSpacing.vertical?:0) *-2,
+        originalInsets.right - (pageConfig.layoutConfiguration.pageInsets.horizontal?:0) + (additionalHorizontalSpacing) *-2
     );
 
     config.portraitLayoutInsets = calculatedInsets;
 
     SBIconImageInfo info = {
-        .size = {.width = 60*(CGFloat)GetLoadoutValue(loc, @"Scale")/100, .height = 60*(CGFloat)GetLoadoutValue(loc, @"Scale")/100},
+        .size = pageConfig.layoutConfiguration.iconImageInfo.size,
         .scale = {3},
-        .continuousCornerRadius = {(CGFloat)GetLoadoutValue(loc, @"IconCorner")}
+        .continuousCornerRadius = {13.5}
     };
     config.iconImageInfo = info;
 }
 
 -(void)initializeCacheOverride
 {
+    // Make sure we save defaults before we get started
+    [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationRoot"];
+    [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationDock"];
+    [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationFolder"];
+
     [HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
     [HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     [self layoutIconViews];
@@ -150,7 +164,8 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     }
     [[(SBRootFolderView *)[kRootFolderController contentView] dockListView] layoutIconsNow];
     [[(SBRootFolderView *)[kRootFolderController contentView] dockView] layoutSubviews];
-    [(SBRootFolderView *)[kRootFolderController contentView] setPageControlHidden:GetLoadoutBool(@"Root", @"HidePageControl")];
+    [(SBRootFolderView *)[kRootFolderController contentView] setPageControlHidden:
+                                     [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hidePageControl];
 }
 
 -(void)layoutIconViewsAnimated
@@ -165,7 +180,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 
 -(void)layoutIndividualIcons
 {
-    BOOL hideLabels = (BOOL)GetLoadoutValue(@"", @"IconLabels");
+    BOOL hideLabels = (BOOL)[HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels;
     for (SBIconListView *list in [kRootFolderController iconListViews])
     {
         for (SBIconView *icon in [list subviews])

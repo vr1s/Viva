@@ -13,6 +13,7 @@
 #include "HomePlusEditor.h"
 #import "HPLayoutManager.h"
 #include <AudioToolbox/AudioToolbox.h>
+#include "HPConfigSelectionViewController.h"
 
 #define kButtonSpacing 10
 
@@ -154,7 +155,8 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
 - (void)loadLoadouts:(UIButton *)button
 {
-    HPLoadoutViewController *vc = [[HPLoadoutViewController alloc] initWithNibName:nil bundle:nil];
+    
+    HPConfigSelectionViewController *vc = [[HPConfigSelectionViewController alloc] initWithNibName:nil bundle:nil];
     //vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
     [vc viewDidLoad];
     [self presentViewController:vc animated:YES completion:NULL];
@@ -572,7 +574,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
                         },
                         .itemInfo = {
                                 .label = @"LEFT_OFFSET",
-                                .configKey = @"LeftInset",
+                                .configKey = @"SideInset",
                                 .min = -400,
                                 .max = 400,
                                 .defaultValue = 0
@@ -596,7 +598,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
                         },
                         .itemInfo = {
                                 .label = @"VERTICAL_SPACING",
-                                .configKey = @"VerticalSpacing",
+                                .configKey = @"vSpacing",
                                 .min = -400,
                                 .max = 400,
                                 .defaultValue = 0
@@ -608,7 +610,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
                         },
                         .itemInfo = {
                                 .label = @"HORIZONTAL_SPACING",
-                                .configKey = @"HorizontalSpacing",
+                                .configKey = @"hSpacing",
                                 .min = -200,
                                 .max = 400,
                                 .defaultValue = 0
@@ -668,7 +670,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
                         },
                         .itemInfo = {
                                 .label = @"ICON_SCALE",
-                                .configKey = @"Scale",
+                                .configKey = @"IconScale",
                                 .min = 1,
                                 .max = 200,
                                 .defaultValue = 100
@@ -703,10 +705,9 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 - (void)handleSettingsButtonPress:(UIButton *)sender
 {
     HPSettingsTableViewController *vc = [[HPSettingsTableViewController alloc] initWithNibName:nil bundle:nil];
+    vc.delegate = self;
     [vc viewDidLoad];
     [self presentViewController:vc animated:YES completion:NULL];
-
-    [[NSNotificationCenter defaultCenter] postNotificationName:kFadeFloatingDockNotificationName object:nil];
 
     [vc opened];
 
@@ -715,7 +716,12 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
 - (void)handleDoneSettingsButtonPress:(UIButton *)sender
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:kShowFloatingDockNotificationName object:nil];
+
+}
+
+- (void)settingsViewControllerDidDismiss
+{
+    self.activeButton.highlighted = NO;
     [[HPLayoutManager sharedInstance] layoutIconViews];
     [[HPLayoutManager sharedInstance] layoutIndividualIcons];
 }

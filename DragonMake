@@ -1,0 +1,60 @@
+---
+package: me.kritanta.homepluspro
+name: HomePlus Pro
+icmd: sbreload
+depends: mobilesubstrate, preferenceloader
+conflicts: me.kritanta.homeplus
+version: 2.5.4
+description: Dynamic, live homescreen layout with an intuitive UI
+author: kritanta
+
+all:
+    archs:
+        - arm64
+        - arm64e
+
+HomePlus:
+    targetvers: 13.0
+    archs:
+        - arm64
+        - arm64e
+    type: tweak
+    cflags: -includePrefix.h -F./frameworks/ -F./layout/Library/Application\ Support/HomePlus.bundle/ -w
+    include:
+        - ./HomePlusEditor/
+        - ./HomePlusEditor/Config/
+        - ./HomePlusEditor/Config/ConfigSelectionView/
+        - ./HomePlusEditor/Data/DefaultConfiguration/
+        - ./HomePlusEditor/EditorUI/
+        - ./HomePlusEditor/EditorUI/MainEditorView/
+        - ./HomePlusEditor/EditorUI/HPControllerViews/
+        - ./HomePlusEditor/Layout/
+        - ./HomePlusEditor/Extensions/ 
+        - ./HomePlusEditor/Extensions/ExtensionViews/
+        - ./HomePlusEditor/Gesture/
+        - ./HomePlusEditor/SystemUI/
+        - ./HomePlusEditor/Settings/
+        - ./HomePlusEditor/Utility/
+        - ../../../
+    wild_recurse: Yes
+    ldflags: "-ObjC"
+    files:
+        - Hooks/*.xm
+        - HomePlus.x
+        - "HomePlusEditor/**/*.m"
+        - "HomePlusEditor/**/*.mm"
+    libs:
+        - mobilegestalt
+    frameworks:
+        - AVFoundation
+        - Accelerate
+        - CoreMedia
+        - IOKit
+        - MobileCoreServices
+        - WebKit
+
+HomePlusPrefs:
+    dir: homeplusprefs
+    type: prefs
+    files:
+        - HPPRootListController.m

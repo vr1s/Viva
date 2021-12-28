@@ -1,16 +1,14 @@
 #ifndef HOMEPLUSEDITOR_H
 #define HOMEPLUSEDITOR_H
 
-#include "Data/HPConfiguration.h"
-#include "Data/HPDataManager.h"
 
 #include "EditorUI/HPControllerView.h"
 #include "HPEditorViewController.h"
 #include "HPEditorViewNavigationTabBar.h"
 #include "HPEditorWindow.h"
-#include "EditorUI/HPLoadoutViewController.h"
 #include "EditorUI/HPUIManager.h"
 
+#include "Config/HPConfigurationManager.h"
 #include "Extensions/HPExtension.h"
 #include "Extensions/HPExtensionManager.h"
 
