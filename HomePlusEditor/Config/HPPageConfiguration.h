@@ -5,6 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "HomePlus.h"
 
+#include <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
+
 #ifndef HOMEPLUS_HPPAGECONFIGURATION_H
 #define HOMEPLUS_HPPAGECONFIGURATION_H
 

@@ -1,5 +1,7 @@
 #include "HomePlus.h"
 
+#include <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
+
 %group iOS14
 
 // idk why we're forced to do this

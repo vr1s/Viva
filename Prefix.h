@@ -22,5 +22,9 @@
 #define kRootFolderController [kIconController _rootFolderController]
 #define kIconModel [(SBIconController *)kIconController model]
 
+#define kIdentifier @"me.kritanta.homeplusprefs"
+#define kSettingsChangedNotification (CFStringRef)@"me.kritanta.homeplusprefs/settingschanged"
+#define kSettingsPath @"/var/mobile/Library/Preferences/me.kritanta.homeplusprefs.plist"
+
 //#define
 #endif
