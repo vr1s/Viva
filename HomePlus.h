@@ -25,11 +25,11 @@
 
 @class SBHomeScreenWindow;
 
-#include <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
-#include <SpringBoardHome/SBIconListModel.h>
-#include <SpringBoard/SBIconController.h>
-#include <SpringBoardHome/SBIconListFlowLayout.h>
-#include <SpringBoard/SBIconModel.h>
+#include "SBIconListGridLayoutConfiguration.h"
+#include "SBIconListModel.h"
+#include "SBIconController.h"
+#include "SBIconListFlowLayout.h"
+#include "SBIconModel.h"
 
 @interface SBFloatingDockViewController
 @property (nonatomic, assign) CGFloat dockOffscreenProgress;
@@ -40,18 +40,6 @@
 @interface SBFloatingDockController
 @property (nonatomic, retain) SBFloatingDockWindow *floatingDockWindow;
 @end
-
-typedef struct SBHIconGridSize {
-	unsigned short columns;
-	unsigned short rows;
-} SBHIconGridSize;
-
-typedef struct SBHIconGridSizeClassSizes {
-	SBHIconGridSize small;
-	SBHIconGridSize medium;
-	SBHIconGridSize large;
-	SBHIconGridSize extralarge;
-} SBHIconGridSizeClassSizes;
 
 
 @interface SBIconListGridLayoutConfiguration (fourteen)

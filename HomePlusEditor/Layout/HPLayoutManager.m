@@ -100,7 +100,8 @@ static NSMutableDictionary *originalConfigs = nil;
         SBHIconGridSizeClassSizes sizes = { .small = { .columns = (short)widgetWidth(2, loadoutValueColumns), .rows = 2 },
                                     .medium = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 2 },
                                     .large = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 },
-                                    .extralarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 } };
+                                    .extraLarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6
+        } };
 
         if (@available(iOS 15, *))
             [(i15SBIconListGridLayoutConfiguration *)config setIconGridSizeClassSizes:&sizes];

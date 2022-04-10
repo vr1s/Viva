@@ -21,33 +21,21 @@
 
 
 @synthesize systemGestureView = _systemGestureView;
-
 @synthesize activeGestureRecognizer = _activeGestureRecognizer;
 
 + (instancetype)sharedInstance
 {
     static HPGestureManager *sharedInstance = nil;
     static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
+    dispatch_once(&onceToken, ^
+    {
         sharedInstance = (HPGestureManager *) [[[self class] alloc] init];
     });
     return sharedInstance;
 }
 
-- (instancetype)init
-{
-    self = [super init];
-
-    if (self) {
-    }
-
-    return self;
-}
-
 - (void)insertGestureRecognizers:(UISystemGestureView *)systemGestureView
 {
-    //if (![DRMManager.sharedInstance active])
-    //  return;
     _systemGestureView = systemGestureView;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activationListener:) name:kEditingModeDisabledNotificationName object:nil];
@@ -81,43 +69,52 @@
     self.activeGestureRecognizer.enabled = YES;
     self.inactiveGestureRecognizer.enabled = NO;
 
-
     self.editorActivated = NO;
     self.editorOpened = NO;
 }
 
--(void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
+- (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer
 {
 
-    if (![(SpringBoard*)[UIApplication sharedApplication] isShowingHomescreen])
+    if (![(SpringBoard *) [UIApplication sharedApplication] isShowingHomescreen])
     {
         gestureRecognizer.state = UIGestureRecognizerStateCancelled;
         return;
     }
 
-    if (gestureRecognizer.scale > self.panAmount && gestureRecognizer==self.activeGestureRecognizer)
+    if (gestureRecognizer.scale > self.panAmount && gestureRecognizer == self.activeGestureRecognizer)
+    {
         gestureRecognizer.scale = self.panAmount;
+    }
 
-    if (self.activeGestureRecognizer.state >= 1 && gestureRecognizer!=self.activeGestureRecognizer && gestureRecognizer.state != UIGestureRecognizerStateEnded)
+    if (self.activeGestureRecognizer.state >= 1 && gestureRecognizer != self.activeGestureRecognizer && gestureRecognizer.state != UIGestureRecognizerStateEnded)
+    {
         return;
+    }
 
-    if (self.inactiveGestureRecognizer.state >= 1 && gestureRecognizer==self.activeGestureRecognizer && gestureRecognizer.state != UIGestureRecognizerStateEnded)
+    if (self.inactiveGestureRecognizer.state >= 1 && gestureRecognizer == self.activeGestureRecognizer && gestureRecognizer.state != UIGestureRecognizerStateEnded)
+    {
         return;
-
-    //NSLog(@"HomeP: %f %f %@", (float)gestureRecognizer.scale, (float)gestureRecognizer.velocity, gestureRecognizer.description);
+    }
 
     CGFloat maxAmt = 1;
 
     if (gestureRecognizer.scale < 0.7)
+    {
         gestureRecognizer.scale = 0.7;
+    }
 
     CGFloat scalie = gestureRecognizer.scale;
 
     if (gestureRecognizer.scale > 1 && gestureRecognizer != self.activeGestureRecognizer)
+    {
         scalie *= (self.inactiveGestureRecognizer.enabled ? .7 : 1);
+    }
 
     if (scalie > 1)
+    {
         scalie = 1;
+    }
 
 
     self.panAmount = scalie;
@@ -137,19 +134,24 @@
     if (gestureRecognizer.state == UIGestureRecognizerStateEnded)
     {
         if (self.panAmount < 0)
+        {
             self.panAmount = 0;
+        }
 
         if (self.panAmount > maxAmt)
+        {
             self.panAmount = maxAmt;
+        }
 
         if (self.panAmount > maxAmt * 0.90)
         {
             [[[HPUIManager sharedInstance] editorViewController] transitionViewsToActivationPercentage:0 withDuration:0.15];
             [UIView animateWithDuration:0.2
-                             animations:^{
-                                 [HPSystemUIManager sharedInstance].wallpaperWindow.transform = CGAffineTransformMakeScale(1,1);
-                                 [HPSystemUIManager sharedInstance].homeWindow.transform = CGAffineTransformMakeScale(1,1);
-                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1,1);
+                             animations:^
+                             {
+                                 [HPSystemUIManager sharedInstance].wallpaperWindow.transform = CGAffineTransformMakeScale(1, 1);
+                                 [HPSystemUIManager sharedInstance].homeWindow.transform = CGAffineTransformMakeScale(1, 1);
+                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1, 1);
                              }
                              completion:^(BOOL finished)
                              {
@@ -175,9 +177,10 @@
             [[[HPUIManager sharedInstance] editorViewController] transitionViewsToActivationPercentage:1 withDuration:0.15];
 
             [UIView animateWithDuration:0.2
-                             animations:^{
-                                 CGAffineTransform restState = CGAffineTransformMakeScale(0.7,0.7);
-                                 restState.ty=-kMaxAmt;
+                             animations:^
+                             {
+                                 CGAffineTransform restState = CGAffineTransformMakeScale(0.7, 0.7);
+                                 restState.ty = -kMaxAmt;
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = restState;
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = restState;
                                  [HPSystemUIManager sharedInstance].floatingDockWindow.transform = restState;
@@ -220,16 +223,16 @@
         }
 
         if (self.editorOpened)
+        {
             self.panAmount = maxAmt;
+        }
         else
         {
             self.panAmount = maxAmt;
 
             self.editorOpened = YES;
-            //AudioServicesPlaySystemSound(1519);
         }
     }
-
 
     CGAffineTransform movement = CGAffineTransformMakeScale(scalie, scalie);
     // .85 = 0.0
@@ -243,15 +246,23 @@
     // (.85 - x)*(60/9)
     //
 
-    CGFloat bump = scalie > 0.85 ? 0 : (.85-scalie)*(6.66666666666666666)*(-kMaxAmt)*1.42;
-    movement = CGAffineTransformTranslate(movement,0,bump);
+    CGFloat bump = scalie > 0.85 ? 0 : (.85 - scalie) * (6.66666666666666666) * (-kMaxAmt) * 1.42;
+    movement = CGAffineTransformTranslate(movement, 0, bump);
 
     [HPSystemUIManager sharedInstance].wallpaperWindow.transform = movement;
     [HPSystemUIManager sharedInstance].homeWindow.transform = movement;
     [HPManager sharedInstance].floatingDockWindow.transform = movement;
 
-    CGFloat pctgOfTotal = ((((.15*[UIScreen mainScreen].bounds.size.height) - [HPSystemUIManager sharedInstance].homeWindow.frame.origin.y)+ [HPSystemUIManager sharedInstance].homeWindow.frame.size.height)  ) / [UIScreen mainScreen].bounds.size.height;
-    pctgOfTotal = 1-pctgOfTotal;
+    CGFloat pctgOfTotal =
+            (
+                (
+                    (.15 * [UIScreen mainScreen].bounds.size.height)
+                    - [HPSystemUIManager sharedInstance].homeWindow.frame.origin.y
+                )
+                + [HPSystemUIManager sharedInstance].homeWindow.frame.size.height
+            )
+            / [UIScreen mainScreen].bounds.size.height;
+    pctgOfTotal = 1 - pctgOfTotal;
     pctgOfTotal *= 5;
     [[[HPUIManager sharedInstance] editorViewController] transitionViewsToActivationPercentage:pctgOfTotal];
 

@@ -19,8 +19,10 @@ HomePlus:
         - arm64
         - arm64e
     type: tweak
-    cflags: -includePrefix.h -F./frameworks/ -F./layout/Library/Application\ Support/HomePlus.bundle/ -w
+    cflags: -includePrefix.h -F./frameworks/ -F./layout/Library/Application\ Support/HomePlus.bundle/ -w -F~/SDK/PrivateFrameworks
     include:
+        - ./headers/SpringBoardHome
+        - ./headers/SpringBoard
         - ./HomePlusEditor/
         - ./HomePlusEditor/Config/
         - ./HomePlusEditor/Config/ConfigSelectionView/

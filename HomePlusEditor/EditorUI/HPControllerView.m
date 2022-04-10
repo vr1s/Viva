@@ -34,25 +34,12 @@
 
 @synthesize config = _config;
 
-/*
-Properties: 
-    @property (nonatomic, retain) UIView *topView;
-    @property (nonatomic, retain) UIView *bottomView;
-
-    @property (nonatomic, retain) UILabel *topLabel;
-    @property (nonatomic, retain) OBSlider *topControl;
-    @property (nonatomic, retain) UITextField *topTextField;
-
-    @property (nonatomic, retain) UILabel *bottomLabel;
-    @property (nonatomic, retain) OBSlider *bottomControl;
-    @property (nonatomic, retain) UITextField *bottomTextField;
-*/
-
 - (instancetype)initWithFrame:(CGRect)frame config:(HPControllerViewConfiguration)config
 {
     self = [super initWithFrame:frame];
 
-    if (self) {
+    if (self)
+    {
         self.config = config;
         [self layoutControllerView];
         [self updateLayoutForConfiguration:config];
@@ -72,31 +59,33 @@ Properties:
 
     // Top View
     self.topView = [
-            [UIView alloc] initWithFrame: CGRectMake(0,
-                                                    kTopContainerTopAnchor * [[UIScreen mainScreen] bounds].size.height, 
-                                                    [[UIScreen mainScreen] bounds].size.width, 
-                                                    kContainerHeight * [[UIScreen mainScreen] bounds].size.height)];
+            [UIView alloc] initWithFrame:CGRectMake(0,
+                    kTopContainerTopAnchor * [[UIScreen mainScreen] bounds].size.height,
+                    [[UIScreen mainScreen] bounds].size.width,
+                    kContainerHeight * [[UIScreen mainScreen] bounds].size.height)];
 
     // Top Label
     self.topLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, 0, (0.706) * [[UIScreen mainScreen] bounds].size.width, (0.0615) * [[UIScreen mainScreen] bounds].size.height)];
     [self.topLabel setText:@"Top Control"];
-    self.topLabel.textColor=[UIColor whiteColor];
-    self.topLabel.textAlignment=NSTextAlignmentCenter;
+    self.topLabel.textColor = [UIColor whiteColor];
+    self.topLabel.textAlignment = NSTextAlignmentCenter;
+
     // Top Text Field. 
-    self.topTextField = [[UITextField alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+(0.730) * [[UIScreen mainScreen] bounds].size.width, (0.048) * [[UIScreen mainScreen] bounds].size.height, (0.1333) * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height)];
-        
+    self.topTextField = [[UITextField alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + (0.730) * [[UIScreen mainScreen] bounds].size.width, (0.048) * [[UIScreen mainScreen] bounds].size.height, (0.1333) * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height)];
+
     [self.topTextField addTarget:self
-            action:@selector(topTextFieldUpdated:)
-            forControlEvents:UIControlEventEditingChanged];
+                          action:@selector(topTextFieldUpdated:)
+                forControlEvents:UIControlEventEditingChanged];
     [self.topTextField addTarget:self
-            action:@selector(topTextFieldBeganEditing:)
-            forControlEvents:UIControlEventEditingDidBegin];
+                          action:@selector(topTextFieldBeganEditing:)
+                forControlEvents:UIControlEventEditingDidBegin];
     self.topTextField.keyboardType = UIKeyboardTypeNumberPad;
     self.topTextField.textColor = [UIColor whiteColor];
 
     [self.topView addSubview:backer];
+
     // Top Input Keyboard
-    UIToolbar* keyboardToolbar = [[UIToolbar alloc] init];
+    UIToolbar *keyboardToolbar = [[UIToolbar alloc] init];
 
     [keyboardToolbar sizeToFit];
 
@@ -107,11 +96,11 @@ Properties:
 
 
     UIBarButtonItem *flexBarButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                    target:nil action:nil];
+            initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                 target:nil action:nil];
     UIBarButtonItem *doneBarButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                    target:self action:@selector(topTextFieldEndedEditing:)];
+            initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                 target:self action:@selector(topTextFieldEndedEditing:)];
     keyboardToolbar.items = @[flexBarButton, doneBarButton];
     self.topTextField.inputAccessoryView = keyboardToolbar;
     [self.topTextField.inputAccessoryView addSubview:tminusButton];
@@ -121,11 +110,8 @@ Properties:
     [self.topControl addTarget:self action:@selector(topSliderUpdated:) forControlEvents:UIControlEventValueChanged];
     [self.topControl setBackgroundColor:[UIColor clearColor]];
     self.topControl.maximumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:0.2];
-    self.topControl.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha: 0.9];
-    //self.topControl.minimumValue = -100;
-    //self.topControl.maximumValue = [[UIScreen mainScreen] bounds].size.height;
+    self.topControl.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     self.topControl.continuous = YES;
-    //self.topControl.value = 0;
 
     // Bottom View
     self.bottomView = [[UIView alloc] initWithFrame:CGRectMake(0, (0.862) * [[UIScreen mainScreen] bounds].size.height, (1) * [[UIScreen mainScreen] bounds].size.width, (0.123) * [[UIScreen mainScreen] bounds].size.height)];
@@ -133,25 +119,24 @@ Properties:
     // Bottom Label
     self.bottomLabel = [[UILabel alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, 0, (0.706) * [[UIScreen mainScreen] bounds].size.width, 50)];
     [self.bottomLabel setText:@"Bottom Control"];
-    self.bottomLabel.textColor=[UIColor whiteColor];
-    self.bottomLabel.textAlignment=NSTextAlignmentCenter;
+    self.bottomLabel.textColor = [UIColor whiteColor];
+    self.bottomLabel.textAlignment = NSTextAlignmentCenter;
 
     // Bottom Text Field
-    self.bottomTextField = [[UITextField alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+(0.730) * [[UIScreen mainScreen] bounds].size.width, (0.048) * [[UIScreen mainScreen] bounds].size.height, 50, 30)];
+    self.bottomTextField = [[UITextField alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + (0.730) * [[UIScreen mainScreen] bounds].size.width, (0.048) * [[UIScreen mainScreen] bounds].size.height, 50, 30)];
     [self.bottomTextField addTarget:self
-            action:@selector(bottomTextFieldUpdated:)
-            forControlEvents:UIControlEventEditingChanged];
-    
+                             action:@selector(bottomTextFieldUpdated:)
+                   forControlEvents:UIControlEventEditingChanged];
+
     [self.bottomTextField addTarget:self
-            action:@selector(bottomTextFieldBeganEditing:)
-            forControlEvents:UIControlEventEditingDidBegin];
+                             action:@selector(bottomTextFieldBeganEditing:)
+                   forControlEvents:UIControlEventEditingDidBegin];
 
     // Bottom Text Field Bar
-
     self.bottomTextField.keyboardType = UIKeyboardTypeNumberPad;
     self.bottomTextField.textColor = [UIColor whiteColor];
 
-    UIToolbar* bkeyboardToolbar = [[UIToolbar alloc] init];
+    UIToolbar *bkeyboardToolbar = [[UIToolbar alloc] init];
 
     [bkeyboardToolbar sizeToFit];
 
@@ -161,27 +146,23 @@ Properties:
     [minusButton addTarget:self action:@selector(invertBottomTextField) forControlEvents:UIControlEventTouchUpInside];
 
     UIBarButtonItem *bflexBarButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
-                                    target:nil action:nil];
+            initWithBarButtonSystemItem:UIBarButtonSystemItemFlexibleSpace
+                                 target:nil action:nil];
     UIBarButtonItem *bdoneBarButton = [[UIBarButtonItem alloc]
-                                    initWithBarButtonSystemItem:UIBarButtonSystemItemDone
-                                    target:self action:@selector(bottomTextFieldEndedEditing:)];
+            initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                 target:self action:@selector(bottomTextFieldEndedEditing:)];
     bkeyboardToolbar.items = @[bflexBarButton, bdoneBarButton];
     self.bottomTextField.inputAccessoryView = bkeyboardToolbar;
 
     [self.bottomTextField.inputAccessoryView addSubview:minusButton];
 
 
-
     self.bottomControl = [[OBSlider alloc] initWithFrame:CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height, (0.700) * [[UIScreen mainScreen] bounds].size.width, 50)];
     [self.bottomControl addTarget:self action:@selector(bottomSliderUpdated:) forControlEvents:UIControlEventValueChanged];
     [self.bottomControl setBackgroundColor:[UIColor clearColor]];
     self.bottomControl.maximumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:0.2];
-    self.bottomControl.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha: 0.9];
-    //self.bottomControl.minimumValue = -400.0;
-    //self.bottomControl.maximumValue = 400.0;
+    self.bottomControl.minimumTrackTintColor = [UIColor colorWithWhite:1.0 alpha:0.9];
     self.bottomControl.continuous = YES;
-    //self.bottomControl.value = 0;
 
     // Assemble Top View
     [self addSubview:self.topView];
@@ -196,9 +177,9 @@ Properties:
     [self.bottomView addSubview:self.bottomTextField];
 
     self.topResetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.topResetButton addTarget:self 
-            action:@selector(handleTopResetButtonPress:)
-            forControlEvents:UIControlEventTouchUpInside];
+    [self.topResetButton addTarget:self
+                            action:@selector(handleTopResetButtonPress:)
+                  forControlEvents:UIControlEventTouchUpInside];
     UIImage *rsImage = [HPResources resetImageToggled:NO];
     [self.topResetButton setImage:rsImage forState:UIControlStateNormal];
     self.topResetButton.frame = CGRectMake(15, (0.0369) * [[UIScreen mainScreen] bounds].size.height, kResetButtonSize, kResetButtonSize);
@@ -207,20 +188,19 @@ Properties:
     [self.topView addSubview:self.topResetButton];
 
     self.bottomResetButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    [self.bottomResetButton addTarget:self 
-            action:@selector(handleBottomResetButtonPress:)
-            forControlEvents:UIControlEventTouchUpInside];
+    [self.bottomResetButton addTarget:self
+                               action:@selector(handleBottomResetButtonPress:)
+                     forControlEvents:UIControlEventTouchUpInside];
     [self.bottomResetButton setImage:rsImage forState:UIControlStateNormal];
     self.bottomResetButton.frame = CGRectMake(15, (0.0369) * [[UIScreen mainScreen] bounds].size.height, kResetButtonSize, kResetButtonSize);
     self.bottomResetButton.alpha = 0.8;
     self.bottomResetButton.center = CGPointMake(self.bottomResetButton.center.x, self.bottomControl.center.y);
     [self.bottomView addSubview:self.bottomResetButton];
 
-    UILabel *location = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width-300, [[UIScreen mainScreen] bounds].size.height-60, 280, 60)];
+    UILabel *location = [[UILabel alloc] initWithFrame:CGRectMake([[UIScreen mainScreen] bounds].size.width - 300, [[UIScreen mainScreen] bounds].size.height - 60, 280, 60)];
     location.text = [[[HPUIManager sharedInstance] editingLocation] substringFromIndex:14];
     location.textAlignment = NSTextAlignmentRight;
     [location setFont:[UIFont systemFontOfSize:13]];
-    //[self addSubview:location];
 }
 
 - (void)updateLayoutForConfiguration:(HPControllerViewConfiguration)config
@@ -241,7 +221,7 @@ Properties:
         case kHPControllerItemTypeCounter:
         {
             self.topLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, (0.0615) * [[UIScreen mainScreen] bounds].size.height);
-            self.topTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+([[UIScreen mainScreen] bounds].size.width / 2) - (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2) - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.048) * [[UIScreen mainScreen] bounds].size.height, (0.1333) * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height);
+            self.topTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + ([[UIScreen mainScreen] bounds].size.width / 2) - (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2) - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.048) * [[UIScreen mainScreen] bounds].size.height, (0.1333) * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height);
             self.topControl.alpha = 0;
 
             UIButton *topMin = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -251,7 +231,7 @@ Properties:
              forControlEvents:UIControlEventTouchUpInside];
             [topMin setTitle:@"-" forState:UIControlStateNormal];
 
-            topMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            topMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, 40.0);
             [self.topView addSubview:topMin];
 
             UIButton *topPlu = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -261,7 +241,7 @@ Properties:
              forControlEvents:UIControlEventTouchUpInside];
             [topPlu setTitle:@"+" forState:UIControlStateNormal];
 
-            topPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            topPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, 40.0);
 
             [self.topView addSubview:topPlu];
 
@@ -294,7 +274,7 @@ Properties:
                           action:@selector(bottomMinus)
                 forControlEvents:UIControlEventTouchUpInside];
             [bottomMin setTitle:@"-" forState:UIControlStateNormal];
-            bottomMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            bottomMin.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, 40.0);
             [self.bottomView addSubview:bottomMin];
 
             UIButton *bottomPlu = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -306,7 +286,7 @@ Properties:
             [bottomMin setBackgroundColor:[UIColor colorWithRed:1.0 green:1.0 blue:1.0 alpha:0.06]];
 
             [bottomPlu setTitle:@"+" forState:UIControlStateNormal];
-            bottomPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2), (0.0369) *  [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 , 40.0);
+            bottomPlu.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) + (((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2), (0.0369) * [[UIScreen mainScreen] bounds].size.height, ((0.7) * [[UIScreen mainScreen] bounds].size.width / 2) - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2, 40.0);
 
             [self.bottomView addSubview:bottomPlu];
 
@@ -321,7 +301,7 @@ Properties:
 
             self.bottomLabel.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width, -10, (0.706) * [[UIScreen mainScreen] bounds].size.width, 50);
 
-            self.bottomTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width+[[UIScreen mainScreen] bounds].size.width / 2 -  ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.0480) * [[UIScreen mainScreen] bounds].size.height, 50, 30);
+            self.bottomTextField.frame = CGRectMake(kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + [[UIScreen mainScreen] bounds].size.width / 2 - ((0.0369) * [[UIScreen mainScreen] bounds].size.height) / 2 - kLeftScreenBuffer * [[UIScreen mainScreen] bounds].size.width + 7, (0.0480) * [[UIScreen mainScreen] bounds].size.height, 50, 30);
 
 
             break;
@@ -341,7 +321,7 @@ Properties:
     HPPageConfiguration *pageConfig = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][[[HPUIManager sharedInstance] editingLocation]];
     self.topControl.value = (float) [pageConfig valueForItem:config.topControl.itemInfo.configKey];
     self.topTextField.text = [NSString stringWithFormat:@"%.0f", self.topControl.value];
-    self.bottomControl.value = (float)  [pageConfig valueForItem:config.bottomControl.itemInfo.configKey];
+    self.bottomControl.value = (float) [pageConfig valueForItem:config.bottomControl.itemInfo.configKey];
     self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", self.bottomControl.value];
 }
 
@@ -369,14 +349,14 @@ Properties:
     [self bottomSliderUpdated:self.bottomControl];
 }
 
-#pragma mark Sliders 
+#pragma mark Sliders
 
 - (void)topSliderUpdated:(UISlider *)slider
 {
     [HPLayoutManager updateConfigItem:_config.topControl.itemInfo.configKey
                           forLocation:[[HPUIManager sharedInstance] editingLocation]
                             withValue:(NSInteger) slider.value];
-    self.topTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat)((NSInteger)(floor([slider value])))];
+    self.topTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat) ((NSInteger) (floor([slider value])))];
 }
 
 - (void)bottomSliderUpdated:(UISlider *)slider
@@ -384,7 +364,7 @@ Properties:
     [HPLayoutManager updateConfigItem:_config.bottomControl.itemInfo.configKey
                           forLocation:[[HPUIManager sharedInstance] editingLocation]
                             withValue:(NSInteger) slider.value];
-    self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat)((NSInteger)(floor([slider value])))];
+    self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", (CGFloat) ((NSInteger) (floor([slider value])))];
 }
 
 #pragma mark Text Fields
@@ -422,12 +402,13 @@ Properties:
 - (void)bottomTextFieldBeganEditing:(UITextField *)textField
 {
     CGAffineTransform transform = CGAffineTransformIdentity;
-    [UIView animateWithDuration:0.4 
-        animations:
-        ^{
-            self.transform = CGAffineTransformTranslate(transform, 0, (0-([[UIScreen mainScreen] bounds].size.height * 0.5)));
-        }
-    ]; 
+    [UIView animateWithDuration:0.4
+                     animations:
+                             ^
+                             {
+                                 self.transform = CGAffineTransformTranslate(transform, 0, (0 - ([[UIScreen mainScreen] bounds].size.height * 0.5)));
+                             }
+    ];
     [[NSNotificationCenter defaultCenter] postNotificationName:kFadeFloatingDockNotificationName object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditorKickViewsUp object:nil];
 }
@@ -437,12 +418,13 @@ Properties:
     [self.bottomTextField resignFirstResponder];
     [[NSNotificationCenter defaultCenter] postNotificationName:kShowFloatingDockNotificationName object:nil];
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditorKickViewsBack object:nil];
-    [UIView animateWithDuration:0.4 
-        animations:
-        ^{  
-            self.transform = CGAffineTransformIdentity;   
-        }
-    ]; 
+    [UIView animateWithDuration:0.4
+                     animations:
+                             ^
+                             {
+                                 self.transform = CGAffineTransformIdentity;
+                             }
+    ];
 }
 
 - (void)bottomTextFieldUpdated:(UITextField *)textField
@@ -451,7 +433,7 @@ Properties:
     [self bottomSliderUpdated:self.bottomControl];
 }
 
--(void)invertBottomTextField
+- (void)invertBottomTextField
 {
     if ([self.bottomTextField.text hasPrefix:@"-"])
     {
@@ -466,13 +448,14 @@ Properties:
 
 #pragma mark Reset Buttons
 
-- (void)handleTopResetButtonPress:(UIButton*)sender 
+- (void)handleTopResetButtonPress:(UIButton *)sender
 {
     AudioServicesPlaySystemSound(1519);
     self.topControl.value = _config.topControl.itemInfo.defaultValue;
     [self topSliderUpdated:self.topControl];
 }
-- (void)handleBottomResetButtonPress:(UIButton*)sender 
+
+- (void)handleBottomResetButtonPress:(UIButton *)sender
 {
     AudioServicesPlaySystemSound(1519);
     self.bottomControl.value = _config.bottomControl.itemInfo.defaultValue;

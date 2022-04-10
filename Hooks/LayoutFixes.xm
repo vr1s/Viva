@@ -13,7 +13,7 @@
 {
 
 SBHIconGridSizeClassSizes sizes = { .small = { .columns = 2, .rows = 2 }, .medium = { .columns = 4, .rows = 2 },
-        .large = { .columns = 4, .rows = 4 }, .extralarge = { .columns = 4, .rows = 6 } };
+        .large = { .columns = 4, .rows = 4 }, .extraLarge = { .columns = 4, .rows = 6 } };
 return %orig(arg1, arg2, arg3, arg4, sizes);
 }
 
@@ -33,7 +33,7 @@ return %orig(arg1, arg2, arg3, arg4, sizes);
 {
 
 SBHIconGridSizeClassSizes sizes = { .small = { .columns = 2, .rows = 2 }, .medium = { .columns = 4, .rows = 2 },
-        .large = { .columns = 4, .rows = 4 }, .extralarge = { .columns = 4, .rows = 6 } };
+        .large = { .columns = 4, .rows = 4 }, .extraLarge = { .columns = 4, .rows = 6 } };
     return %orig(arg1, arg2, arg3, arg4, &sizes);
 }
 
