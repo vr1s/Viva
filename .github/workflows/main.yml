@@ -15,8 +15,8 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       
-      - name: dragon-build
-        uses: DragonBuild/build@0.0.7
+      - name: Compile with dragon
+        uses: DragonBuild/build@master
       
       - uses: actions/upload-artifact@v2
         with:
