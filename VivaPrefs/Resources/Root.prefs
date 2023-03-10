@@ -1,0 +1,34 @@
+---
+title: Viva
+defaults: "sk.vri.vivaprefs"
+items:
+  -
+    label: Viva
+    cell: PSGroupCell
+  -
+    cell: PSSwitchCell
+    label: "Tweak Enabled*"
+    default: true
+    key: VIVAEnabled
+  -
+    cell: PSSwitchCell
+    label: "Disable Gesture*"
+    default: false
+    key: gesturedisabled
+  -
+    cell: PSSwitchCell
+    label: "IconSupport Lib Enabled*"
+    default: true
+    key: iconsupport
+  -
+    detail: PSListItemsController
+    items:
+      - 1: "Drag Down Top Left"
+    cell: PSLinkListCell
+    label: "Activation Gesture"
+    key: gesture
+    default: "Drag Down Top Left"
+  -
+    label: Respring
+    action: "respring:"
+    cell: PSButtonCell

@@ -1,57 +1,26 @@
-# HomePlus Pro
+# Viva
 
-HomePlus Pro is a powerful, featherweight, and extensible homescreen layout and modification tweak for iOS 13-16
+Viva is a modern, free, open source continuation of the old iOS 14 tweak "Viva Pro"
 
-## Extensions:
-Extensions are custom views that allow configuring the preferences of other tweaks, live, from within the HomePlus UI.
+### Get this tweak
 
-Any dev can easily add support to their tweak, and no code is required.
+Repo: 
 
-[info for developers here](https://github.com/KritantaDev/HomePlusPro/blob/master/HomePlusEditor/Extensions/README.md)
+### Build
 
-## Project Layout
+Install dragon: https://dragon.cynder.me/en/latest/setup.html
 
-HomePlusEditor/ - Non-hook class files for the HomePlus UI, managers, and otherwise
+`dragon s` -> setup your device's IP
 
-Hooks/ - (guess what type of code is in this folder)
+`dragon build release install` -> Build the project for release, then install it.
 
-### ./HomePlusEditor/
+### Contributing/Hacking on
 
-#### > Data/
+Building without the `release`/`r` flag will redirect all `NSLog`s to an overlay view you can show/hide by tapping on its borders.
 
-houses HPConfiguration which is an in house replacement for using NSUserDefaults to store config values
 
-#### > EditorUI/
 
-Pretty much the entirety of code related to the editor UI
 
-#### > Extensions/
+### why the rename?
 
-HomePlus Pro Extension support code
-
-#### > Hitbox/
-
-Unfinished replacement for GestureRecognizer.xm
-
-#### > Managers/
-
-Several somewhat reduntant "sharedInstance"-type classes that code throughout the tweak communicates via.
-
-#### > Settings/
-
-Settings view stuff. 
-
-#### > Utility/
-
-functions/classes that didn't quite belong elsewhere
-
-### ./Hooks
-
-Hooks
-
-#### > ios14
-
-There used to be version specific folders. As it stands the code i've written now doesn't require that afaik
-
-I'll move it around after release.
-
+It was too similar to LockPlus. Also it's been a couple of years.

@@ -1,50 +1,51 @@
 ---
-package: sk.vri.hp
-name: HP
+package: sk.vri.viva
+name: Viva
 icmd: sbreload
 depends: mobilesubstrate, preferenceloader
-conflicts: me.kritanta.homeplus, me.kritanta.homepluspro
+conflicts: sk.vri.viva, sk.vri.vivapro
 version: 3.0.0
 description: Dynamic, live homescreen layout with an intuitive UI
-author: kritanta
+author: vrisk/a
 
 all:
     archs:
         - arm64
         - arm64e
 
-HomePlus:
-    targetvers: 13.0
+Viva:
+    type: tweak
     archs:
         - arm64
         - arm64e
-    type: tweak
+    targetvers: 13.0
     cinclude: -F./frameworks/ -I$dragondir/include -I$dragondir/vendor/include -I$dragondir/include/_fallback -I$DRAGONDIR/headers/ -I$pwd
-    cflags: -includePrefix.h -F./layout/Library/Application\ Support/HomePlus.bundle/ -w -F~/SDK/PrivateFrameworks
+    cflags: -includePrefix.h -F./layout/Library/Application\ Support/Viva.bundle/ -w -F~/SDK/PrivateFrameworks
     include:
         - headers/UIKit-Private
-        - ./HomePlusEditor/
-        - ./HomePlusEditor/Config/
-        - ./HomePlusEditor/Config/ConfigSelectionView/
-        - ./HomePlusEditor/Data/DefaultConfiguration/
-        - ./HomePlusEditor/EditorUI/
-        - ./HomePlusEditor/EditorUI/MainEditorView/
-        - ./HomePlusEditor/EditorUI/HPControllerViews/
-        - ./HomePlusEditor/Layout/
-        - ./HomePlusEditor/Extensions/ 
-        - ./HomePlusEditor/Extensions/ExtensionViews/
-        - ./HomePlusEditor/Gesture/
-        - ./HomePlusEditor/SystemUI/
-        - ./HomePlusEditor/Settings/
-        - ./HomePlusEditor/Utility/
+        - include/
+        - ./VivaEditor/
+        - ./VivaEditor/Config/
+        - ./VivaEditor/Config/ConfigSelectionView/
+        - ./VivaEditor/Data/DefaultConfiguration/
+        - ./VivaEditor/EditorUI/
+        - ./VivaEditor/EditorUI/MainEditorView/
+        - ./VivaEditor/EditorUI/VIVAControllerViews/
+        - ./VivaEditor/Layout/
+        - ./VivaEditor/Extensions/ 
+        - ./VivaEditor/Extensions/ExtensionViews/
+        - ./VivaEditor/Gesture/
+        - ./VivaEditor/SystemUI/
+        - ./VivaEditor/Settings/
+        - ./VivaEditor/Utility/
         - ../../../
     wild_recurse: Yes
     ldflags: "-ObjC"
     files:
-        - Hooks/*.xm
-        - HomePlus.xm
-        - "HomePlusEditor/**/*.m"
-        - "HomePlusEditor/**/*.mm"
+        - VivaHooks/*.xm
+        - Viva.xm
+        - "VivaEditor/**/*.m"
+        - "VivaEditor/**/*.mm"
     libs:
         - mobilegestalt
     frameworks:
@@ -55,8 +56,8 @@ HomePlus:
         - MobileCoreServices
         - WebKit
 
-HomePlusPrefs:
-    dir: homeplusprefs
+VivaPrefs:
+    dir: VivaPrefs
     type: prefs
     files:
-        - HPPRootListController.m
+        - VIVARootListController.m

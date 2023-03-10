@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>viva // by vrisk/a</string>
+			<key>footerText</key>
+			<string>Preferences with * require a respring</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<true/>
+			<key>defaults</key>
+			<string>sk.vri.vivaprefs</string>
+			<key>key</key>
+			<string>VIVAEnabled</string>
+			<key>label</key>
+			<string>Tweak Enabled*</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>sk.vri.vivaprefs</string>
+			<key>key</key>
+			<string>gesturedisabled</string>
+			<key>label</key>
+			<string>Disable Gesture*</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>default</key>
+			<real>1</real>
+			<key>defaults</key>
+			<string>sk.vri.vivaprefs</string>
+			<key>label</key>
+			<string>Activation Gesture</string>
+			<key>key</key>
+			<string>gesture</string>
+			<key>validValues</key>
+			<array>
+				<real>1</real>
+			</array>
+			<key>validTitles</key>
+			<array>
+				<string>Pinch to activate</string>
+			</array>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>respring:</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Respring</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Viva</string>
+</dict>
+</plist>

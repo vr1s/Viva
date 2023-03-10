@@ -1,0 +1,6 @@
+#define kEditingModeEnabledNotificationName @"VivaEditingModeEnabled"
+#define kEditingModeDisabledNotificationName @"VivaEditingModeDisabled"
+#define kEditorKickViewsUp @"VivaKickWindowsUp"
+#define kEditorKickViewsBack @"VivaKickWindowsBack"
+#define kFadeFloatingDockNotificationName @"VivaFadeFloatingDock"
+#define kShowFloatingDockNotificationName @"VivaShowFloatingDock"

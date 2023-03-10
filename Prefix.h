@@ -10,9 +10,9 @@
 
 #import <objc/runtime.h>
 // Macros for values we use
-#define GetLoadoutValue(location, item) [[[HPDataManager sharedInstance] currentConfiguration] integerForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", location, item]]
+#define GetLoadoutValue(location, item) [[[VIVADataManager sharedInstance] currentConfiguration] integerForKey:[NSString stringWithFormat:@"%@%@%@", @"VIVAData", location, item]]
 
-#define GetLoadoutBool(location, item) [[[HPDataManager sharedInstance] currentConfiguration] boolForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", location, item]]
+#define GetLoadoutBool(location, item) [[[VIVADataManager sharedInstance] currentConfiguration] boolForKey:[NSString stringWithFormat:@"%@%@%@", @"VIVAData", location, item]]
 
 // TODO: why is this not dynamic?
 #define kDeviceCornerRadius 39
@@ -24,9 +24,9 @@
 #define kRootFolderController [kIconController _rootFolderController]
 #define kIconModel [(SBIconController *)kIconController model]
 
-#define kIdentifier @"me.kritanta.homeplusprefs"
-#define kSettingsChangedNotification (CFStringRef)@"me.kritanta.homeplusprefs/settingschanged"
-#define kSettingsPath @"/var/mobile/Library/Preferences/me.kritanta.homeplusprefs.plist"
+#define kIdentifier @"sk.vri.vivaprefs"
+#define kSettingsChangedNotification (CFStringRef)@"sk.vri.vivaprefs/settingschanged"
+#define kSettingsPath @"/var/mobile/Library/Preferences/sk.vri.vivaprefs.plist"
 
 #ifndef DEBUGGER_OVERLAY
 #define DEBUGGER_OVERLAY
