@@ -83,7 +83,7 @@
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     @try {
-        [kIconModel layout];
+        // [kIconModel layout];
     } 
     @catch (NSException *ex) {
         // NSInternalInconsistancyException
