@@ -21,6 +21,7 @@
 #include "Utility/HPTableCell.h"
 #include "Utility/HPUtility.h"
 #include "Utility/OBSlider.h"
+#include "Layout/HPLayoutManager.h"
 
 #include "HPManager.h"
 

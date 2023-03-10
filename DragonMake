@@ -42,7 +42,7 @@ HomePlus:
     ldflags: "-ObjC"
     files:
         - Hooks/*.xm
-        - HomePlus.x
+        - HomePlus.xm
         - "HomePlusEditor/**/*.m"
         - "HomePlusEditor/**/*.mm"
     libs:

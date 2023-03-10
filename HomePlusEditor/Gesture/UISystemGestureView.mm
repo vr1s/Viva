@@ -7,7 +7,6 @@
 #import "HPGestureManager.h"
 #include "HPManager.h"
 #include "HPUIManager.h"
-#include "HomePlusEditor/Debug/KDBManager.h"
 
 // TODO: this doesn't add overhead but its still a hack. need RE to find a better way.
 static BOOL hasInjectedView = NO;

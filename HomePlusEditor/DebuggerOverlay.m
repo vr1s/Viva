@@ -1,12 +1,8 @@
-#include "HomePlusEditor/Debug/KDBManager.h"
-#include "HomePlusEditor/Debug/KDBOverlayView.h"
-#include "HomePlusEditor/Gesture/HPGestureManager.h"
+#ifndef NDEBUG
 
-// #define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
 
-#define kViewframeWidth UIScreen.mainScreen.bounds.size.width/2
-#define kViewframeHeight UIScreen.mainScreen.bounds.size.height/3
-
+@implementation KDBOverlayView
+@end
 
 @implementation KDBManager {
 @private
@@ -117,3 +113,5 @@
 }
 
 @end
+
+#endif

@@ -81,6 +81,7 @@
     [[[HPUIManager sharedInstance] editorViewController] loadView];
     [view addSubview:[[[HPUIManager sharedInstance] editorViewController] view]];
     [view sendSubviewToBack:[[[HPUIManager sharedInstance] editorViewController] view]];
+    [HPLayoutManager.sharedInstance initializeCacheOverride];
     
     NSLog(@"Added viewController");
 }

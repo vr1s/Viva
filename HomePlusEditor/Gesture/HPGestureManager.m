@@ -7,6 +7,7 @@
 #import "../EditorUI/HPUIManager.h"
 #import "HPUtility.h"
 #import "UISystemGestureView.h"
+#include "HPLayoutManager.h"
 #import "HPSystemUIManager.h"
 #import <AudioToolbox/AudioToolbox.h>
 
@@ -158,7 +159,6 @@
                              {
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = CGAffineTransformMakeScale(1, 1);
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = CGAffineTransformMakeScale(1, 1);
-                                 //[HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1, 1);
                              }
                              completion:^(BOOL finished)
                              {
@@ -171,11 +171,12 @@
                                  if (self.editorActivated)
                                  {
                                      [[HPUIManager sharedInstance] hideEditorView];
-                                     //AudioServicesPlaySystemSound(1519);
                                      self.activeGestureRecognizer.enabled = YES;
                                      self.editorActivated = NO;
                                      self.editorOpened = NO;
                                  }
+
+                                [[HPLayoutManager sharedInstance] doSharedEditorClosedTasks];
                              }
             ];
         }
@@ -190,7 +191,6 @@
                                  restState.ty = -kMaxAmt;
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = restState;
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = restState;
-                                 //[HPSystemUIManager sharedInstance].floatingDockWindow.transform = restState;
                              }
                              completion:^(BOOL finished)
                              {

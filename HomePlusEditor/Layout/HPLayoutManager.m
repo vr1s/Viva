@@ -65,7 +65,8 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     self = [super init];
     if (self)
     {
-
+        self.defaultProvider = [[objc_getClass("SBHDefaultIconListLayoutProvider") alloc] initWithScreenType:3];
+        self.readyForIconModelSwap = NO;
     }
 
     return self;
@@ -82,28 +83,33 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     }
     if ([key isEqualToString:@"Rows"])
     {
-        [kIconModel layout];
+        //[kIconModel layout];
     }
 }
 
-static NSMutableDictionary *originalConfigs = nil;
-
 + (SBIconListGridLayoutConfiguration *)defaultConfigurationForIconLocation:(NSString *)iconLocation 
 {
-    if (!ConfigForLocation(iconLocation))
-        return nil;
-    if (!originalConfigs)
-        originalConfigs = [NSMutableDictionary new];
-    if (!originalConfigs[iconLocation])
+    if (!HPLayoutManager.sharedInstance.originalConfigs)
+        HPLayoutManager.sharedInstance.originalConfigs = [NSMutableDictionary new];
+    if (!HPLayoutManager.sharedInstance.overlayConfigs)
+        HPLayoutManager.sharedInstance.overlayConfigs = [NSMutableDictionary new];
+    if (!HPLayoutManager.sharedInstance.originalConfigs[iconLocation])
+    {
         // Store a copy, we're going to change the original object.
-        originalConfigs[iconLocation] = [ConfigForLocation(iconLocation) copy];
+        HPLayoutManager.sharedInstance.originalConfigs[iconLocation] = [HPLayoutManager.sharedInstance.defaultProvider makeLayoutForIconLocation:iconLocation];
+        HPLayoutManager.sharedInstance.overlayConfigs[iconLocation] = [HPLayoutManager.sharedInstance.defaultProvider makeLayoutForIconLocation:iconLocation];
+    }
 
-    return originalConfigs[iconLocation];
+    return [(SBIconListGridLayout*)HPLayoutManager.sharedInstance.originalConfigs[iconLocation] layoutConfiguration];
 }
+
 
 + (void)updateCacheForLocation:(NSString *)iconLocation
 {
-    SBIconListGridLayoutConfiguration *config = ConfigForLocation(iconLocation);
+    SBIconListFlowLayout *layout = HPLayoutManager.sharedInstance.overlayConfigs[iconLocation];
+    // NSLog(@"%@", [layout description]);
+    SBIconListGridLayoutConfiguration *config = [layout layoutConfiguration];
+    SBIconListGridLayoutConfiguration *mgrConfig = ConfigForLocation(iconLocation);
 
     // Set columns and rows here.
     HPPageConfiguration *pageConfig = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][iconLocation];
@@ -116,6 +122,8 @@ static NSMutableDictionary *originalConfigs = nil;
     }
     [config setNumberOfPortraitColumns:pageConfig.layoutConfiguration.iconGridSize.columns];
     [config setNumberOfPortraitRows:pageConfig.layoutConfiguration.iconGridSize.rows];
+    [mgrConfig setNumberOfPortraitColumns:pageConfig.layoutConfiguration.iconGridSize.columns];
+    [mgrConfig setNumberOfPortraitRows:pageConfig.layoutConfiguration.iconGridSize.rows];
 
     // This set of code is iOS 14 Widget/Applist specific
     if (@available(iOS 14, *))
@@ -128,9 +136,14 @@ static NSMutableDictionary *originalConfigs = nil;
         } };
 
         if (@available(iOS 15, *))
+        {
             [(i15SBIconListGridLayoutConfiguration *)config setIconGridSizeClassSizes:&sizes];
-        else
+            [(i15SBIconListGridLayoutConfiguration *)mgrConfig setIconGridSizeClassSizes:&sizes];
+        }
+        else{
             [config setIconGridSizeClassSizes:sizes];
+            [mgrConfig setIconGridSizeClassSizes:sizes];
+            }
     }
 
     // set top/bottom/left/right insets (for portrait).
@@ -158,6 +171,7 @@ static NSMutableDictionary *originalConfigs = nil;
     );
 
     config.portraitLayoutInsets = calculatedInsets;
+    mgrConfig.portraitLayoutInsets = calculatedInsets;
 
     SBIconImageInfo info = {
         .size = pageConfig.layoutConfiguration.iconImageInfo.size,
@@ -165,6 +179,19 @@ static NSMutableDictionary *originalConfigs = nil;
         .continuousCornerRadius = {13.5}
     };
     config.iconImageInfo = info;
+    mgrConfig.iconImageInfo = info;
+}
+
+-(SBIconListFlowLayout *)layoutForIconLocation:(NSString* )iconLocation
+{
+        if (!HPLayoutManager.sharedInstance.overlayConfigs[iconLocation])
+        {
+            [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationRoot"];
+            [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationDock"];
+            [HPLayoutManager defaultConfigurationForIconLocation:@"SBIconLocationFolder"];
+            [HPLayoutManager updateCacheForLocation:iconLocation];
+        }
+        return HPLayoutManager.sharedInstance.overlayConfigs[iconLocation];
 }
 
 -(void)initializeCacheOverride
@@ -178,7 +205,12 @@ static NSMutableDictionary *originalConfigs = nil;
     [HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     [self layoutIconViews];
     [self layoutIndividualIcons];
+    self.readyForIconModelSwap = YES;
+}
 
+- (void)doSharedEditorClosedTasks
+{
+    //[kIconModel layout];
 }
 
 -(void)layoutIconViews
@@ -186,6 +218,24 @@ static NSMutableDictionary *originalConfigs = nil;
     for (SBIconListView *list in [kRootFolderController iconListViews])
     {
         [list layoutIconsNow];
+        SBIconListModel* model = [list model];
+
+        NSUInteger loadoutValueRows = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.rows;
+        NSUInteger loadoutValueColumns = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.columns;
+
+        struct SBHIconGridSize size;
+        size.rows = loadoutValueRows;
+        size.columns = loadoutValueColumns;
+
+        [model setValue:[NSValue value:&size withObjCType:@encode(struct SBHIconGridSize)] forKey:@"_gridSize"];
+
+        SBHIconGridSizeClassSizes sizes = { .small = { .columns = (short)widgetWidth(2, loadoutValueColumns), .rows = 2 },
+                                            .medium = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 2 },
+                                            .large = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 },
+                                            .extraLarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6
+                } };
+
+        [model setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassSizes)] forKey:@"_gridSizeClassSizes"];
     }
     [[(SBRootFolderView *)[kRootFolderController contentView] dockListView] layoutIconsNow];
     [[(SBRootFolderView *)[kRootFolderController contentView] dockView] layoutSubviews];

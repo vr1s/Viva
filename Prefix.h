@@ -6,6 +6,7 @@
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
 #include <SpringBoard/SBIconModel.h>
+#include <SpringBoard/SBIconController.h>
 
 #import <objc/runtime.h>
 // Macros for values we use
@@ -26,27 +27,16 @@
 #define kIdentifier @"me.kritanta.homeplusprefs"
 #define kSettingsChangedNotification (CFStringRef)@"me.kritanta.homeplusprefs/settingschanged"
 #define kSettingsPath @"/var/mobile/Library/Preferences/me.kritanta.homeplusprefs.plist"
-#include <Foundation/Foundation.h>
-#include <UIKit/UIKit.h>
 
-@interface KDBManager : NSObject
-
-@property (readonly) UIView *overlayView;
-@property (readonly) UITextView *textView;
-@property (readonly) NSString *textQueue;
-@property BOOL open;
-@property BOOL started;
-
-+(instancetype)sharedInstance;
-
-
-- (void)setupOverlayView;
-
--(void)logString:(NSString *)string file:(char *)file line:(int)line;
-
-@end
-
-// #define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
+#ifndef DEBUGGER_OVERLAY
+#define DEBUGGER_OVERLAY
+#ifndef NDEBUG
+#include "DebuggerOverlay.h"
+#endif
+#endif
+#ifndef NDEBUG
+#define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
+#endif
 
 //#define
 #endif

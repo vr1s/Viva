@@ -1,4 +1,9 @@
 #include "HomePlus.h"
+
+#ifndef NDEBUG
+#define DEBUGGER_OVERLAY
+#endif
+
 #include "HomePlusEditor.h"
 #define KEY @"HPModifiedIconState"
 #pragma mark Dock BG Handling
@@ -20,25 +25,6 @@
 
     return x;
 }
-
-- (void)layoutSubviews
-{
-    %orig;
-    /*
-    UIView *bgView = MSHookIvar<UIView *>(self, "_backgroundView"); 
-
-    if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataDockBG"])
-    {
-        bgView.alpha = 0;
-        bgView.hidden = YES;
-    }
-    else
-{
-bgView.alpha = 1;
-bgView.hidden = NO;
-}*/
-}
-
 %end
 
 #pragma mark Editor Exit Listeners
@@ -73,24 +59,6 @@ bgView.hidden = NO;
 }
 %end
 
-# pragma mark Floating Dock Background
-
-%hook SBFloatingDockView
-
--(void)layoutSubviews
-{
-    %orig;
-    /*
-    if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataHideDockBG"])
-    {
-        self.backgroundView.alpha = 0;
-        self.backgroundView.hidden = YES;
-    }*/
-}
-
-%end
-
-
 
 %hook SBFStaticWallpaperImageView
 
@@ -122,8 +90,6 @@ bgView.hidden = NO;
 
     [[HPUIManager sharedInstance] loadUpImagesFromWallpaper:viewImage];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateBackgroundObject" object:nil];
-
-    NSLog(@"Scene update triggered");
 }
 
 %end
@@ -166,6 +132,24 @@ bgView.hidden = NO;
         }
     }
     return %orig(arg1, location);
+}
+
+%end
+
+%hook SBIconModel 
+
+-(NSUInteger)maxIconCountForDock
+{
+    return ([HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationDock"].layoutConfiguration.iconGridSize.columns);
+}
+
+%end
+
+%hook SBHIconManager
+
+-(NSUInteger)iconModel:(id)arg0 maxRowCountForListInRootFolderWithInterfaceOrientation:(NSInteger)arg1
+{
+    return [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.rows;
 }
 
 %end

@@ -12,9 +12,14 @@
 
 #include "HPUIManager.h"
 #include "HPExtensionManager.h"
+#include "HPConfigurationManager.h"
+#include "HPLayoutManager.h"
 #include "HPManager.h"
 #include "HPUtility.h"
 #include "HomePlus.h"
+#include <SpringBoardHome/SBFolderControllerConfiguration.h>
+@interface SBRootFolderControllerConfiguration : SBFolderControllerConfiguration
+@end
 #import <AudioToolbox/AudioToolbox.h>
 #include <objc/runtime.h>
 #include <dlfcn.h> 
@@ -34,6 +39,70 @@ static BOOL performedInitialConfiguration;
 
     [[HPManager sharedInstance] performInitialConfigurationWithView:view];
 }
+%end
+
+%hook SBRootFolderControllerConfiguration
+
+-(id)listLayoutProvider
+{
+    return [HPLayoutManager sharedInstance];
+}
+
+%end
+
+%hook SBRootFolderController
+
+-(id)listLayoutProvider
+{
+    return [HPLayoutManager sharedInstance];
+}
+
+
+%end
+
+@interface SBFolder : NSObject
+@end
+
+@interface SBRootFolder : SBFolder 
+@end
+
+
+NSInteger widgetWidthSlidein(NSInteger size, NSInteger cols)
+{
+    CGFloat colf = (CGFloat) cols;
+    if (size <= 2)
+        return (NSInteger) (ceil(0.5f * colf)); // floor when widget resizing logic is implemented.
+    if (size == 3)
+        return (NSInteger) (floor(0.75f * colf));
+    if (size >= 4)
+        return cols;
+    return size;
+}
+
+%hook SBRootFolder 
+
+-(struct SBHIconGridSize)listGridSize
+{
+    struct SBHIconGridSize size;
+    NSUInteger loadoutValueRows = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.rows;
+    NSUInteger loadoutValueColumns = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.columns;
+
+    size.rows = loadoutValueRows;
+    size.columns = loadoutValueColumns;
+
+    [self setValue:[NSValue value:&size withObjCType:@encode(struct SBHIconGridSize)] forKey:@"_listGridSize"];
+
+    SBHIconGridSizeClassSizes sizes = { .small = { .columns = (short)widgetWidthSlidein(2, loadoutValueColumns), .rows = 2 },
+                                        .medium = { .columns = (short)widgetWidthSlidein(4, loadoutValueColumns), .rows = 2 },
+                                        .large = { .columns = (short)widgetWidthSlidein(4, loadoutValueColumns), .rows = 6 },
+                                        .extraLarge = { .columns = (short)widgetWidthSlidein(4, loadoutValueColumns), .rows = 6
+            } };
+
+    [self setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassSizes)] forKey:@"_iconGridSizeClassSizes"];
+
+    return size;
+}
+
 %end
 
 
