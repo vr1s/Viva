@@ -184,14 +184,18 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 
 -(SBIconListFlowLayout *)layoutForIconLocation:(NSString* )iconLocation
 {
-        if (!VIVALayoutManager.sharedInstance.overlayConfigs[iconLocation])
-        {
-            [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationRoot"];
-            [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationDock"];
-            [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationFolder"];
-            [VIVALayoutManager updateCacheForLocation:iconLocation];
-        }
-        return VIVALayoutManager.sharedInstance.overlayConfigs[iconLocation];
+    if ([iconLocation isEqualToString:@"SBIconLocationRootWithWidgets"])
+    {
+        iconLocation = @"SBIconLocationRoot";
+    }
+    if (!VIVALayoutManager.sharedInstance.overlayConfigs[iconLocation])
+    {
+        [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationRoot"];
+        [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationDock"];
+        [VIVALayoutManager defaultConfigurationForIconLocation:@"SBIconLocationFolder"];
+        [VIVALayoutManager updateCacheForLocation:iconLocation];
+    }
+    return VIVALayoutManager.sharedInstance.overlayConfigs[iconLocation];
 }
 
 -(void)initializeCacheOverride

@@ -3,7 +3,7 @@ package: sk.vri.viva
 name: Viva
 icmd: sbreload
 depends: mobilesubstrate, preferenceloader
-conflicts: sk.vri.viva, sk.vri.vivapro
+conflicts: me.kritanta.homeplus, me.kritanta.homepluspro
 version: 3.0.0
 description: Dynamic, live homescreen layout with an intuitive UI
 author: vrisk/a
