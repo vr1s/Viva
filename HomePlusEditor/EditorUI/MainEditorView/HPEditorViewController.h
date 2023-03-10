@@ -3,7 +3,7 @@
 //
 // View controller for the editor/homebase for handling UI
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 

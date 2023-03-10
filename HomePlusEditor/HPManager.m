@@ -61,6 +61,7 @@
         // Views to shrink with pan gesture
         self.wallpaperView = nil;
         self.homeWindow = nil;
+        self.homeView = nil;
         self.floatingDockWindow = nil;
         self.mockBackgroundView = nil;
 
@@ -75,22 +76,12 @@
 
 -(void)performInitialConfigurationWithView:(UIView*)view
 {
-    //if ([DRMManager.sharedInstance active])
+    self.homeView = view;
     [kIconController addChildViewController:[[HPUIManager sharedInstance] editorViewController]];
     [[[HPUIManager sharedInstance] editorViewController] loadView];
     [view addSubview:[[[HPUIManager sharedInstance] editorViewController] view]];
+    [view sendSubviewToBack:[[[HPUIManager sharedInstance] editorViewController] view]];
     NSLog(@"Added viewController");
-    //[HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
-    //[HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
-    @try {
-        // [kIconModel layout];
-    } 
-    @catch (NSException *ex) {
-        // NSInternalInconsistancyException
-        // If we send springboard a gridSize where one of the values is zero, SB will shit itself
-        // There's not much you can do here, except let SB load once without this code, 
-        // And hopefully in the future present an alert letting the user know to reset their config.
-    }
 }
 
 @end

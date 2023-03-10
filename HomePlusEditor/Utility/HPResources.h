@@ -4,7 +4,7 @@
 //
 // Holds some images used everywhere in the tweak in base64 string format
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 

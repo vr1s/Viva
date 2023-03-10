@@ -19,11 +19,13 @@
 @private
     UISystemGestureView *_systemGestureView;
     UIPinchGestureRecognizer *_activeGestureRecognizer;
+    UIPinchGestureRecognizer *_inactiveGestureRecognizer;
 }
 
 
 @synthesize systemGestureView = _systemGestureView;
 @synthesize activeGestureRecognizer = _activeGestureRecognizer;
+@synthesize inactiveGestureRecognizer = _inactiveGestureRecognizer;
 
 + (instancetype)sharedInstance
 {
@@ -51,9 +53,11 @@
     self.panAmount = 1;
 
 
-    self.inactiveGestureRecognizer = pan2;
+    _inactiveGestureRecognizer.delegate = _systemGestureView;
+    _inactiveGestureRecognizer = pan2;
     FBSDisplayIdentity *displayIdentity = [[[UIScreen mainScreen] displayConfiguration] identity];
     [[_UISystemGestureManager sharedInstance] addGestureRecognizer:_activeGestureRecognizer toDisplayWithIdentity:displayIdentity];
+    [[_UISystemGestureManager sharedInstance] addGestureRecognizer:_inactiveGestureRecognizer toDisplayWithIdentity:displayIdentity];
 }
 
 

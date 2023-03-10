@@ -5,7 +5,7 @@
 // View controller for the Editor and Home base for anything UI.
 // 
 // Created Oct 2019 
-// Authors: Kritanta
+// Authors: vriska
 //
 // TODO: rewrite or at least heavily optimize this file
 // 
@@ -98,7 +98,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     [self.view addSubview:self.tabBar];
     [self.view addSubview:self.extensionBar];
 
-    [self.view addGestureRecognizer:[[HPGestureManager sharedInstance] inactiveGestureRecognizer]];
+    // [[[HPGestureManager sharedInstance] systemGestureView] addGestureRecognizer:[[HPGestureManager sharedInstance] inactiveGestureRecognizer]];
 }
 
 - (HPEditorViewNavigationTabBar *)anExtensionBar

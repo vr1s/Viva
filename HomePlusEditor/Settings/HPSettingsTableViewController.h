@@ -4,7 +4,7 @@
 //
 // Small little view controller for the settings table
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 

@@ -7,7 +7,7 @@
 // Eventually this can be expanded to offload certain functions here,
 //      although currently most of the stuff is handled manually by the ViewController
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 

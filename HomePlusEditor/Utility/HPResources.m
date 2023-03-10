@@ -6,7 +6,7 @@
 // Pretty big file, be careful opening. 
 // 
 // Created Oct 2019 
-// Authors: Kritanta
+// Authors: vriska
 //
 // TODO: certain parts of this could be better honestly
 

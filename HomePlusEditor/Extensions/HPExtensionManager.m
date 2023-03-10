@@ -6,7 +6,7 @@
 //
 // Maybe at some point this should be refactored to HPExtensionManager
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 

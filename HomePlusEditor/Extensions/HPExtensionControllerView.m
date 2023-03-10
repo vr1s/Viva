@@ -7,7 +7,7 @@
 //
 // Also handles interacting with tweak prefs
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 // TODO: add titles

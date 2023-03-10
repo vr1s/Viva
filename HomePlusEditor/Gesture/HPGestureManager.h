@@ -34,7 +34,6 @@
 @interface HPGestureManager : NSObject
 
 @property (nonatomic, assign) BOOL editorOpened;
-@property (nonatomic, strong) UIPinchGestureRecognizer *inactiveGestureRecognizer;
 @property (nonatomic, assign) CGFloat panAmount;
 @property (nonatomic, assign) BOOL editorActivated;
 @property (nonatomic, assign) BOOL hitboxMaxed;
@@ -46,6 +45,7 @@
 @property (nonatomic, retain) UISystemGestureView *systemGestureView;
 
 @property (nonatomic, strong) UIPinchGestureRecognizer *activeGestureRecognizer;
+@property (nonatomic, strong) UIPinchGestureRecognizer *inactiveGestureRecognizer;
 
 + (instancetype)sharedInstance;
 

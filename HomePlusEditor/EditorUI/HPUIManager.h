@@ -6,7 +6,7 @@
 //
 // Maybe at some point this should be refactored to HPUIManager :)
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 #include <UIKit/UIKit.h>

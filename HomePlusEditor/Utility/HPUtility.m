@@ -5,7 +5,7 @@
 // Utilities used across the tweak
 // TODO: refactor a "HPUtilities"
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 // TODO: can we use C functions for this, maybe?

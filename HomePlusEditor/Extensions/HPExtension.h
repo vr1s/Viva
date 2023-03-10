@@ -5,7 +5,7 @@
 // Extension Object. 
 // Holds everything important about an extension that was found
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 

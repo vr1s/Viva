@@ -4,7 +4,7 @@
 //
 // Global manager for the Editor (and tutorial) views.
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 

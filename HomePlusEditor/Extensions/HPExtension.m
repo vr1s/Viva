@@ -8,7 +8,7 @@
 // Created by passing a dictionary and the location of the plist that dict represents
 // * This could possibly reduced to only the location of the plist. 
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Dec 2019
 //
 // TODO: fix jank

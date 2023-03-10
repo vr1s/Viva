@@ -2,7 +2,7 @@
 // HPControllerView.h
 // HomePlus
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 

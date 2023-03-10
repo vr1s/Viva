@@ -7,7 +7,7 @@
 // Currently gutted. This needs to be rewritten and reimplemented
 //      as using Springboard's UserDefaults is not the best practice. 
 //
-// Authors: Kritanta
+// Authors: vriska
 // Created  Oct 2019
 //
 
@@ -43,6 +43,7 @@
 // Views to shrink with pan gesture
 @property (nonatomic, retain)  UIView *wallpaperView;
 @property (nonatomic, retain)  UIView *homeWindow;
+@property (nonatomic, retain)  UIView *homeView;
 @property (nonatomic, retain)  UIView *floatingDockWindow;
 @property (nonatomic, retain)  UIView *mockBackgroundView;
 

@@ -1,10 +1,10 @@
 ---
-package: me.kritanta.homepluspro
-name: HomePlus Pro
+package: sk.vri.hp
+name: HP
 icmd: sbreload
 depends: mobilesubstrate, preferenceloader
-conflicts: me.kritanta.homeplus
-version: 2.6.6
+conflicts: me.kritanta.homeplus, me.kritanta.homepluspro
+version: 3.0.0
 description: Dynamic, live homescreen layout with an intuitive UI
 author: kritanta
 
@@ -43,7 +43,6 @@ HomePlus:
     files:
         - Hooks/*.xm
         - HomePlus.x
-        - "HomePlusEditor/Debug/Injector.x"
         - "HomePlusEditor/**/*.m"
         - "HomePlusEditor/**/*.mm"
     libs:
