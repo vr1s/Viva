@@ -10,6 +10,8 @@
 #import "HPSystemUIManager.h"
 #import <AudioToolbox/AudioToolbox.h>
 
+#include <SpringBoard/SpringBoard.h>
+
 
 @implementation HPGestureManager
 {

@@ -5,10 +5,6 @@
 # hopefully i can add this back later
 *.xcodeproj
 
-# unused files
-frameworks/*
-
-
 # straight up not sure what this is but just in case, lol
 #ImageData.h
 

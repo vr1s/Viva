@@ -19,10 +19,10 @@ HomePlus:
         - arm64
         - arm64e
     type: tweak
-    cflags: -includePrefix.h -F./frameworks/ -F./layout/Library/Application\ Support/HomePlus.bundle/ -w -F~/SDK/PrivateFrameworks
+    cinclude: -F./frameworks/ -I$dragondir/include -I$dragondir/vendor/include -I$dragondir/include/_fallback -I$DRAGONDIR/headers/ -I$pwd
+    cflags: -includePrefix.h -F./layout/Library/Application\ Support/HomePlus.bundle/ -w -F~/SDK/PrivateFrameworks
     include:
-        - ./headers/SpringBoardHome
-        - ./headers/SpringBoard
+        - headers/UIKit-Private
         - ./HomePlusEditor/
         - ./HomePlusEditor/Config/
         - ./HomePlusEditor/Config/ConfigSelectionView/

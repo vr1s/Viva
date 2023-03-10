@@ -8,10 +8,30 @@
 #include "HomePlus.h"
 #import "HPConfigurationManager.h"
 #import "HPPageConfiguration.h"
+#import <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
+
+#include <SpringBoard/SBIconController.h>
+#include <SpringBoardHome/SBRootFolderView.h>
+#include <SpringBoardHome/SBIconListGridLayout.h>
+#include <SpringBoardHome/SBHIconManager.h>
+#include <SpringBoardHome/SBIconView.h>
+#include <SpringBoardHome/SBDockIconListView.h>
+#include <SpringBoardHome/SBDockView.h>
 
 #define kListLayoutProvider [[[objc_getClass("SBIconController") sharedInstance] iconManager] listLayoutProvider]
-#define ConfigForLocation(location) [[kListLayoutProvider layoutForIconLocation:location] layoutConfiguration]
+#define ConfigForLocation(location) [(SBIconListGridLayout *)[kListLayoutProvider layoutForIconLocation:location] \
+layoutConfiguration]
 #define kAppLibraryIconListView [[[[objc_getClass("SBIconController") sharedInstance] _libraryViewController] _podFolderViewController] currentIconListView]
+
+
+@interface SBIconListGridLayoutConfiguration (fourteen)
+-(void)setIconGridSizeClassSizes:(SBHIconGridSizeClassSizes)sizes;
+@end
+
+@interface i15SBIconListGridLayoutConfiguration : NSObject
+-(void)setIconGridSizeClassSizes:(SBHIconGridSizeClassSizes *)sizes;
+@end
+
 
 
 NSInteger widgetWidth(NSInteger size, NSInteger cols)

@@ -7,6 +7,12 @@
 #import "../EditorUI/HPUIManager.h"
 #import "HPUtility.h"
 
+#include <SpringBoard/SBWallpaperController.h>
+#include <SpringBoard/SBIconController.h>
+#include <SpringBoard/SBFloatingDockController.h>
+
+#include <SpringBoardHome/SBHIconManager.h>
+
 
 @implementation HPSystemUIManager
 {

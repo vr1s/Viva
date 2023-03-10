@@ -12,6 +12,9 @@
 #import "HPUIManager.h"
 #import "HPLayoutManager.h"
 
+#include <SpringBoard/SBIconController.h>
+#include <SpringBoard/SBIconModel.h>
+
 #define kIconModelDidLayoutNotification @"SBIconModelWillLayoutIconStateNotification"
 
 @implementation HPManager

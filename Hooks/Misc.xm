@@ -3,6 +3,10 @@
 #define KEY @"HPModifiedIconState"
 #pragma mark Dock BG Handling
 
+#include <SpringBoard/SpringBoard.h>
+
+#include <SpringBoardHome/SBIconView.h>
+
 %hook SBDockView
 
 // This is what we need to hook to hide the dock background cleanly

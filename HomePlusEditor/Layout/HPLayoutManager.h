@@ -6,6 +6,8 @@
 #include <UIKit/UIKit.h>
 #include "HomePlus.h"
 
+#include <SpringBoardHome/SBIconListGridLayoutConfiguration.h>
+
 #ifndef HOMEPLUS_HPLAYOUTMANAGER_H
 #define HOMEPLUS_HPLAYOUTMANAGER_H
 

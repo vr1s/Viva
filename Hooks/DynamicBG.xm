@@ -6,6 +6,9 @@
 #include "HPManager.h"
 #include "HPExtensionManager.h"
 #include "HPUtility.h"
+
+#include "UIRootSceneWindow.h"
+
 #pragma mark Dynamic Window Background
 
 %hook UIRootSceneWindow

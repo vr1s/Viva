@@ -17,6 +17,9 @@
 #include "../../HomePlus.h"
 #import "HPConfigurationManager.h"
 
+#include <SpringBoard/SBIconController.h>
+#include <SpringBoard/SBIconModel.h>
+
 @interface HPEditorViewController () 
 
 @property (nonatomic, readwrite, strong) HPControllerView *offsetControlView;

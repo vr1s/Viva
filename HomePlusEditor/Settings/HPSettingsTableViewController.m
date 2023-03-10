@@ -22,6 +22,9 @@
 #include "HPConfigurationDirectory.h"
 #include "HPSystemUIManager.h"
 
+#include <SpringBoard/SBIconController.h>
+#include <SpringBoard/SBIconModel.h>
+
 static NSArray *_rtCells;
 
 #pragma mark UIViewController

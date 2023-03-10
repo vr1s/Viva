@@ -4,7 +4,6 @@
 
 #import "HPPageConfiguration.h"
 
-
 @implementation HPPageConfiguration
 {
 
