@@ -11,6 +11,7 @@
 // 
 #include "HomePlus.h"
 #include "HomePlusEditor.h"
+#import "HPLayoutManager.h"
 #include <AudioToolbox/AudioToolbox.h>
 
 #define kButtonSpacing 10
@@ -368,6 +369,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
 - (void)handleDefaultBarTabButtonPress:(UIButton *)button
 {
+    AudioServicesPlaySystemSound(1519);
     NSUInteger index = [self.tabBar.subviews indexOfObject:button];
 
     if (index < 4)
@@ -484,7 +486,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     {
         return;
     }
-    AudioServicesPlaySystemSound(1519);
+    //AudioServicesPlaySystemSound(1519);
     [[HPUIManager sharedInstance] setEditingLocation:@"SBIconLocationRoot"];
     [[self.view subviews]
             makeObjectsPerformSelector:@selector(removeFromSuperview)];
@@ -714,6 +716,8 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 - (void)handleDoneSettingsButtonPress:(UIButton *)sender
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kShowFloatingDockNotificationName object:nil];
+    [[HPLayoutManager sharedInstance] layoutIconViews];
+    [[HPLayoutManager sharedInstance] layoutIndividualIcons];
 }
 
 - (void)resignAllTextFields
@@ -724,7 +728,6 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 - (void)loadControllerView:(HPControllerView *)arg1
 {
     [self resignAllTextFields];
-    AudioServicesPlaySystemSound(1519);
 
     [UIView animateWithDuration:.2
                      animations:

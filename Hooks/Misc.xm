@@ -3,8 +3,6 @@
 #define KEY @"HPModifiedIconState"
 #pragma mark Dock BG Handling
 
-
-
 %hook SBDockView
 
 // This is what we need to hook to hide the dock background cleanly
@@ -25,12 +23,16 @@
 
     UIView *bgView = MSHookIvar<UIView *>(self, "_backgroundView"); 
 
-    // Dont use UserDefaults like this. Use the bool api. I am lazy. 
-    if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataHideDockBG"])
+    if ([[[HPDataManager sharedInstance] currentConfiguration] integerForKey:@"HPDataDockBG"])
     {
         bgView.alpha = 0;
         bgView.hidden = YES;
     }
+    else
+{
+bgView.alpha = 1;
+bgView.hidden = NO;
+}
 }
 
 %end
@@ -115,6 +117,40 @@
 -(BOOL)_isAcceptingOrientationChangesFromSource:(NSInteger)arg
 {
     return NO;
+}
+
+%end
+
+%hook SBIconView
+
+-(void)configureForLabelAllowed:(BOOL)allowed
+{
+    if ([self.location isEqualToString:@"SBIconLocationRoot"])
+    {
+        if (GetLoadoutValue(@"", @"IconLabels"))
+        {
+            %orig(NO);
+            //[self setIconLabelAlpha:0];
+            return;
+        }
+    }
+    %orig;
+}
+
+%end
+
+%hook SBIconController
+
+-(BOOL)iconManager:(id)arg1 allowsBadgingForIconLocation:(NSString *)location
+{
+    if ([location isEqualToString:@"SBIconLocationRoot"])
+    {
+        if (GetLoadoutValue(@"", @"IconBadges"))
+        {
+            return NO;
+        }
+    }
+    return %orig(arg1, location);
 }
 
 %end

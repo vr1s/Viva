@@ -10,6 +10,8 @@
 // Macros for values we use
 #define GetLoadoutValue(location, item) [[[HPDataManager sharedInstance] currentConfiguration] integerForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", location, item]]
 
+#define GetLoadoutBool(location, item) [[[HPDataManager sharedInstance] currentConfiguration] boolForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", location, item]]
+
 // TODO: why is this not dynamic?
 #define kDeviceCornerRadius 39
 

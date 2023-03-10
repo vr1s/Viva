@@ -138,6 +138,8 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     [HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
     [HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     [self layoutIconViews];
+    [self layoutIndividualIcons];
+
 }
 
 -(void)layoutIconViews
@@ -146,6 +148,9 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     {
         [list layoutIconsNow];
     }
+    [[(SBRootFolderView *)[kRootFolderController contentView] dockListView] layoutIconsNow];
+    [[(SBRootFolderView *)[kRootFolderController contentView] dockView] layoutSubviews];
+    [(SBRootFolderView *)[kRootFolderController contentView] setPageControlHidden:GetLoadoutBool(@"Root", @"HidePageControl")];
 }
 
 -(void)layoutIconViewsAnimated
@@ -160,11 +165,15 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 
 -(void)layoutIndividualIcons
 {
+    BOOL hideLabels = (BOOL)GetLoadoutValue(@"", @"IconLabels");
     for (SBIconListView *list in [kRootFolderController iconListViews])
     {
-        for (UIView *icon in [list subviews])
+        for (SBIconView *icon in [list subviews])
         {
+            if (![icon isMemberOfClass:objc_getClass("SBIconView")])
+                return;
             [icon layoutSubviews];
+            [icon configureForLabelAllowed:!hideLabels];
         }
     }
 }
