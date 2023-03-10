@@ -3,6 +3,7 @@
 #include "../Data/HPDataManager.h"
 #include "HPUIManager.h"
 #include "../Utility/HPUtility.h"
+#import "HPLayoutManager.h"
 
 @interface HPLoadoutViewController () <UITableViewDelegate, UITableViewDataSource>
 
@@ -169,7 +170,7 @@
         [[HPDataManager sharedInstance] loadConfigurationWithName:name];
         [kIconModel layout];
         [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-        [[HPManager sharedInstance] layoutIconViews];
+        [[HPLayoutManager sharedInstance] layoutIconViews];
         [[[HPUIManager sharedInstance] editorViewController] reload];
         [self.table reloadData];
     }
@@ -197,7 +198,7 @@
             [[HPDataManager sharedInstance] loadConfigurationWithName:@"Default"];
             [kIconModel layout];
             [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-            [[HPManager sharedInstance] layoutIconViews];
+            [[HPLayoutManager sharedInstance] layoutIconViews];
             [[[HPUIManager sharedInstance] editorViewController] reload];
         }
         [((HPConfiguration *) [[HPDataManager sharedInstance] savedConfigurations][(NSUInteger) indexPath.row]) delete];
@@ -226,7 +227,7 @@
 
     [kIconModel layout];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-    [[HPManager sharedInstance] layoutIconViews];
+    [[HPLayoutManager sharedInstance] layoutIconViews];
     [[[HPUIManager sharedInstance] editorViewController] reload];
 }
 

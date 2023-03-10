@@ -18,6 +18,31 @@
 #define kContainerHeight 0.123
 #define kResetButtonSize 25.0
 
+typedef enum HPControllerItemType : NSUInteger {
+    kHPControllerItemTypeSlider,
+    kHPControllerItemTypeCounter,
+    kHPControllerItemTypeSwitch,
+    kHPControllerItemTypeNone
+} HPControllerItemType;
+
+typedef struct HPControllerItemInfo {
+    NSString *label;
+    NSString *configKey;
+    NSInteger min;
+    NSInteger max;
+    NSInteger defaultValue;
+} HPControllerItemInfo;
+
+typedef struct HPControllerViewItem {
+    HPControllerItemType itemType;
+    HPControllerItemInfo itemInfo;
+} HPControllerViewItem;
+
+typedef struct HPControllerViewConfiguration {
+    HPControllerViewItem topControl;
+    HPControllerViewItem bottomControl;
+} HPControllerViewConfiguration;
+
 @interface HPControllerView : UIView
 
 @property (nonatomic, retain) UIView *topView;
@@ -33,6 +58,10 @@
 
 @property (nonatomic, retain) UIButton *topResetButton;
 @property (nonatomic, retain) UIButton *bottomResetButton;
+
+@property (nonatomic, assign) HPControllerViewConfiguration config;
+
+- (instancetype)initWithFrame:(CGRect)frame config:(HPControllerViewConfiguration)config;
 
 - (void)layoutControllerView;
 

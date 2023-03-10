@@ -57,12 +57,7 @@
 
 - (void)performInitialConfiguration;
 
-+(void)updateCacheForLocation:(NSString *)iconLocation;
 
-
--(void)layoutIconViews;
-
--(void)layoutIconViewsAnimated;
 @end
 
 #endif

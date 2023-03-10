@@ -4,18 +4,6 @@
 #pragma mark Dock BG Handling
 
 
-NSInteger widgetWidth(NSInteger size, NSInteger cols)
-{
-    CGFloat colf = (CGFloat) cols;
-    if (size <= 2)
-        return (NSInteger) (floor(0.5f * colf)); // floor when widget resizing logic is implemented.
-    if (size == 3)
-        return (NSInteger) (floor(0.75f * colf));
-    if (size >= 4)
-        return cols;
-    return size;
-}
-
 
 %hook SBDockView
 

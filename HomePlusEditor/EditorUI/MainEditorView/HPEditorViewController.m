@@ -9,8 +9,8 @@
 //
 // TODO: rewrite or at least heavily optimize this file
 // 
-#include "../../HomePlus.h"
-#include "../HomePlusEditor.h"
+#include "HomePlus.h"
+#include "HomePlusEditor.h"
 #include <AudioToolbox/AudioToolbox.h>
 
 #define kButtonSpacing 10
@@ -551,7 +551,33 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 {
     if (!_offsetControlView)
     {
-        _offsetControlView = [[HPOffsetControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        HPControllerViewConfiguration config = {
+                .topControl = {
+                        .itemType = {
+                                kHPControllerItemTypeSlider
+                        },
+                        .itemInfo = {
+                                .label = @"TOP_OFFSET",
+                                .configKey = @"TopInset",
+                                .min = -100,
+                                .max = (NSInteger) [[UIScreen mainScreen] bounds].size.height,
+                                .defaultValue = 0
+                        }
+                },
+                .bottomControl = {
+                        .itemType = {
+                                kHPControllerItemTypeSlider
+                        },
+                        .itemInfo = {
+                                .label = @"LEFT_OFFSET",
+                                .configKey = @"LeftInset",
+                                .min = -400,
+                                .max = 400,
+                                .defaultValue = 0
+                        }
+                }
+        };
+        _offsetControlView = [[HPControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds] config:config];
         _offsetControlView.alpha = 0;
     }
     return _offsetControlView;
@@ -561,7 +587,33 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 {
     if (!_spacingControlView)
     {
-        _spacingControlView = [[HPSpacingControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        HPControllerViewConfiguration config = {
+                .topControl = {
+                        .itemType = {
+                                kHPControllerItemTypeSlider
+                        },
+                        .itemInfo = {
+                                .label = @"VERTICAL_SPACING",
+                                .configKey = @"VerticalSpacing",
+                                .min = -400,
+                                .max = 400,
+                                .defaultValue = 0
+                        }
+                },
+                .bottomControl = {
+                        .itemType = {
+                                kHPControllerItemTypeSlider
+                        },
+                        .itemInfo = {
+                                .label = @"HORIZONTAL_SPACING",
+                                .configKey = @"HorizontalSpacing",
+                                .min = -200,
+                                .max = 400,
+                                .defaultValue = 0
+                        }
+                }
+        };
+        _spacingControlView = [[HPControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds] config:config];
         _spacingControlView.alpha = 0;
     }
     return _spacingControlView;
@@ -571,7 +623,33 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 {
     if (!_iconCountControlView)
     {
-        _iconCountControlView = [[HPIconCountControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        HPControllerViewConfiguration config = {
+                .topControl = {
+                        .itemType = {
+                                kHPControllerItemTypeCounter
+                        },
+                        .itemInfo = {
+                                .label = @"ROWS",
+                                .configKey = @"Rows",
+                                .min = 1,
+                                .max = 14,
+                                .defaultValue = 6
+                        }
+                },
+                .bottomControl = {
+                        .itemType = {
+                                kHPControllerItemTypeCounter
+                        },
+                        .itemInfo = {
+                                .label = @"COLUMNS",
+                                .configKey = @"Columns",
+                                .min = 1,
+                                .max = 14,
+                                .defaultValue = 4
+                        }
+                }
+        };
+        _iconCountControlView = [[HPControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds] config:config];
         _iconCountControlView.alpha = 0;
     }
     return _iconCountControlView;
@@ -581,7 +659,33 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 {
     if (!_scaleControlView)
     {
-        _scaleControlView = [[HPScaleControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+        HPControllerViewConfiguration config = {
+                .topControl = {
+                        .itemType = {
+                                kHPControllerItemTypeSlider
+                        },
+                        .itemInfo = {
+                                .label = @"ICON_SCALE",
+                                .configKey = @"Scale",
+                                .min = 1,
+                                .max = 200,
+                                .defaultValue = 100
+                        }
+                },
+                .bottomControl = {
+                        .itemType = {
+                                kHPControllerItemTypeNone
+                        },
+                        .itemInfo = {
+                                .label = @"ICON_CORNER",
+                                .configKey = @"IconCorner",
+                                .min = -400,
+                                .max = 400,
+                                .defaultValue = 0
+                        }
+                }
+        };
+        _scaleControlView = [[HPControllerView alloc] initWithFrame:[[UIScreen mainScreen] bounds] config:config];
         _scaleControlView.alpha = 0;
     }
     return _scaleControlView;
