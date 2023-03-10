@@ -41,6 +41,7 @@
 - (void)insertGestureRecognizers:(UISystemGestureView *)systemGestureView
 {
     _systemGestureView = systemGestureView;
+    NSLog(@"Configured Gesture View");
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activationListener:) name:kEditingModeDisabledNotificationName object:nil];
 

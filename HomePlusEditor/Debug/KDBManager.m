@@ -1,7 +1,8 @@
 #include "HomePlusEditor/Debug/KDBManager.h"
 #include "HomePlusEditor/Debug/KDBOverlayView.h"
+#include "HomePlusEditor/Gesture/HPGestureManager.h"
 
-#define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
+// #define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
 
 #define kViewframeWidth UIScreen.mainScreen.bounds.size.width/2
 #define kViewframeHeight UIScreen.mainScreen.bounds.size.height/3
@@ -16,6 +17,7 @@
 @synthesize textView = _textView;
 @synthesize textQueue = _textQueue;
 @synthesize open = _open;
+@synthesize started = _started;
 
 - (instancetype)init
 {
@@ -31,12 +33,14 @@
 
 + (instancetype)sharedInstance
 {
-    static id _sharedInstance = nil;
+    static KDBManager* _sharedInstance = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^
     {
         _sharedInstance = [[self alloc] init];
     });
+    if (!_sharedInstance.started)
+        [_sharedInstance setupOverlayView];
 
     return _sharedInstance;
 }
@@ -55,6 +59,8 @@
 
 - (void)setupOverlayView 
 {
+    if (![HPGestureManager sharedInstance].systemGestureView)
+        return;
     CGRect screenRect = [[UIScreen mainScreen] bounds];
     CGFloat screenWidth = screenRect.size.width;
     CGFloat screenHeight = screenRect.size.height;
@@ -62,7 +68,11 @@
     UITapGestureRecognizer *singleFingerTap = [[UITapGestureRecognizer alloc] initWithTarget:self 
                                           action:@selector(handleTap:)];
     [_overlayView addGestureRecognizer:singleFingerTap];
-    [self handleTap:nil];
+    // uncom to start opened 
+    // [self handleTap:nil];
+    [[HPGestureManager sharedInstance].systemGestureView.superview addSubview:_overlayView];
+    _started = YES;
+    NSLog(@"Log Overlay Initialized");
 }
 
 - (void)handleTap:(UITapGestureRecognizer *)recognizer

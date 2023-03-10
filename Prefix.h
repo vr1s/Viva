@@ -34,6 +34,7 @@
 @property (readonly) UITextView *textView;
 @property (readonly) NSString *textQueue;
 @property BOOL open;
+@property BOOL started;
 
 +(instancetype)sharedInstance;
 
@@ -44,7 +45,7 @@
 
 @end
 
-#define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
+// #define NSLog(...) [KDBManager.sharedInstance logString:[NSString stringWithFormat:__VA_ARGS__] file:__FILE__ line:__LINE__]
 
 //#define
 #endif

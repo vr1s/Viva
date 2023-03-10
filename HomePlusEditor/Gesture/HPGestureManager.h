@@ -5,10 +5,10 @@
 @import Foundation;
 @import UIKit;
 #import <objc/NSObject.h>
+#include "UISystemGestureView.h"
 
 @class HPHitboxView;
 @class HPHitboxWindow;
-@class UISystemGestureView;
 
 #ifndef HOMEPLUS_HPGESTURERECOGNIZERVIEW_H
 #define HOMEPLUS_HPGESTURERECOGNIZERVIEW_H
