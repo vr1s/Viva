@@ -106,6 +106,28 @@ bgView.hidden = NO;
 
 %end
 
+@interface PBUIPosterViewController : UIViewController
+@end
+
+%hook PBUIPosterViewController 
+
+-(void)scene:(id)arg1 clientDidConnect:(id)arg2
+{
+    %orig;
+
+    UIGraphicsBeginImageContext([self view].frame.size);
+    [[self view].layer renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *viewImage = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+
+    [[HPUIManager sharedInstance] loadUpImagesFromWallpaper:viewImage];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateBackgroundObject" object:nil];
+
+    NSLog(@"Scene update triggered");
+}
+
+%end
+
 
 %hook SBIconView
 

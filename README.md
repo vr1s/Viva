@@ -1,6 +1,6 @@
 # HomePlus Pro
 
-HomePlus Pro is a powerful, featherweight, and extensible homescreen layout and modification tweak for iOS 13-15
+HomePlus Pro is a powerful, featherweight, and extensible homescreen layout and modification tweak for iOS 13-16
 
 ## Extensions:
 Extensions are custom views that allow configuring the preferences of other tweaks, live, from within the HomePlus UI.

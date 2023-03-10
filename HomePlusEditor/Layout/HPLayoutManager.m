@@ -80,6 +80,10 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     {
         [[HPLayoutManager sharedInstance] layoutIndividualIcons];
     }
+    if ([key isEqualToString:@"Rows"])
+    {
+        [kIconModel layout];
+    }
 }
 
 static NSMutableDictionary *originalConfigs = nil;

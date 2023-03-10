@@ -213,6 +213,7 @@
 
         [HPSystemUIManager sharedInstance].homeWindow.layer.cornerRadius = [HPUtility isCurrentDeviceNotched] ? 35 : 0;
         [HPSystemUIManager sharedInstance].wallpaperWindow.layer.cornerRadius = [HPUtility isCurrentDeviceNotched] ? 35 : 0;
+        [HPSystemUIManager sharedInstance].wallpaperWindow.layer.masksToBounds = YES;
         [HPSystemUIManager sharedInstance].homeWindow.layer.cornerCurve = kCACornerCurveContinuous;
         [HPSystemUIManager sharedInstance].wallpaperWindow.layer.cornerCurve = kCACornerCurveContinuous;
     }
@@ -220,6 +221,7 @@
     {
         [HPSystemUIManager sharedInstance].homeWindow.layer.cornerRadius = 0;
         [HPSystemUIManager sharedInstance].wallpaperWindow.layer.cornerRadius = 0;
+        [HPSystemUIManager sharedInstance].wallpaperWindow.layer.masksToBounds = NO;
     }
 
     if (self.panAmount >= maxAmt)

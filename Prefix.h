@@ -5,6 +5,7 @@
 // TODO: do we actually need this here still?
 #include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
+#include <SpringBoard/SBIconModel.h>
 
 #import <objc/runtime.h>
 // Macros for values we use

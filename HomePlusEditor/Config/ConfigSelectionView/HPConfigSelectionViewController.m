@@ -163,26 +163,26 @@
 
 - (void)createNewButtonPressed:(UIButton *)button
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Enter Name"
-                                                    message:@"  "
-                                                   delegate:self
-                                          cancelButtonTitle:@"Cancel"
-                                          otherButtonTitles:@"OK", nil];
-    alert.alertViewStyle = UIAlertViewStylePlainTextInput;
-    [alert show];
-}
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:@"Enter Name" message:nil preferredStyle:UIAlertControllerStyleAlert];
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-    if (buttonIndex == 1)
-    {
-        NSString *name = [alertView textFieldAtIndex:0].text;
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField *textField) {
+        textField.placeholder = @"Name";
+    }];
+
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        NSString *name = alertController.textFields.firstObject.text;
         [HPConfigurationManager.sharedInstance setCurrentConfiguration:[HPConfigurationManager.sharedInstance configurationWithName:name createIfNecessary:YES]];
         [HPConfigurationManager.sharedInstance save];
         [HPLayoutManager.sharedInstance initializeCacheOverride];
         [[[HPUIManager sharedInstance] editorViewController] reload];
         [self.table reloadData];
-    }
+    }];
+
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+
+    [self presentViewController:alertController animated:YES completion:nil];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
