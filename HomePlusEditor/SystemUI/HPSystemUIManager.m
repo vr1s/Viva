@@ -39,7 +39,7 @@
 
         self.homeWindow = [[objc_getClass("SBUIController") sharedInstance] window];
         self.wallpaperWindow = [[objc_getClass("SBWallpaperController") sharedInstance] _window];
-        self.floatingDockWindow = [[kIconController floatingDockController] floatingDockWindow];
+        //self.floatingDockWindow = [[kIconController floatingDockController] floatingDockWindow];
 
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorStateChanged:) name:kEditingModeEnabledNotificationName object:nil];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(editorStateChanged:) name:kEditingModeDisabledNotificationName object:nil];

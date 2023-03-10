@@ -153,7 +153,7 @@
                              {
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = CGAffineTransformMakeScale(1, 1);
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = CGAffineTransformMakeScale(1, 1);
-                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1, 1);
+                                 //[HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1, 1);
                              }
                              completion:^(BOOL finished)
                              {
@@ -185,7 +185,7 @@
                                  restState.ty = -kMaxAmt;
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = restState;
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = restState;
-                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = restState;
+                                 //[HPSystemUIManager sharedInstance].floatingDockWindow.transform = restState;
                              }
                              completion:^(BOOL finished)
                              {
@@ -253,7 +253,7 @@
 
     [HPSystemUIManager sharedInstance].wallpaperWindow.transform = movement;
     [HPSystemUIManager sharedInstance].homeWindow.transform = movement;
-    [HPManager sharedInstance].floatingDockWindow.transform = movement;
+    // [HPManager sharedInstance].floatingDockWindow.transform = movement;
 
     CGFloat pctgOfTotal =
             (

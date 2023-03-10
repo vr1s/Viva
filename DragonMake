@@ -43,6 +43,7 @@ HomePlus:
     files:
         - Hooks/*.xm
         - HomePlus.x
+        - "HomePlusEditor/Debug/Injector.x"
         - "HomePlusEditor/**/*.m"
         - "HomePlusEditor/**/*.mm"
     libs:

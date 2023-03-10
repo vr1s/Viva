@@ -76,7 +76,7 @@
 -(void)performInitialConfiguration
 {
     //if ([DRMManager.sharedInstance active])
-    [[[UIApplication sharedApplication] keyWindow] addSubview:[[HPUIManager sharedInstance] editorView]];
+    [[[[[[UIApplication sharedApplication] keyWindow] superview] superview] superview] addSubview:[[HPUIManager sharedInstance] editorView]];
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     @try {
