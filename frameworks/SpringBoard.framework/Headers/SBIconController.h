@@ -28,6 +28,7 @@
 
 @interface SBIconController : UIViewController
 
+
 @property (nonatomic) BOOL _ignoreMutatingIconListsOnApplicationInstall; // ivar: __ignoreMutatingIconListsOnApplicationInstall
 @property (readonly, nonatomic) NSObject<OS_dispatch_queue> *accountStoreQueue; // ivar: _accountStoreQueue
 @property (readonly, nonatomic) SBAlertItemsController *alertItemsController;

@@ -27,12 +27,12 @@ NSDictionary *prefs = nil;
 
 static BOOL performedInitialConfiguration;
 
-%hook SBHomeScreenViewController
-- (void)loadView
+%hook SBHomeScreenView
+- (void)movedToSuperview:(UIView*)view
 {
     %orig;
 
-    [[HPManager sharedInstance] performInitialConfiguration];
+    [[HPManager sharedInstance] performInitialConfigurationWithView:view];
 }
 %end
 

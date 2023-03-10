@@ -12,7 +12,6 @@
 #include <UIKit/UIKit.h>
 
 #import "HomePlusEditor/EditorUI/MainEditorView/HPEditorViewController.h"
-#import "HomePlusEditor/EditorUI/MainEditorView/HPEditorWindow.h"
 
 
 #ifndef HPUIManager_H
@@ -22,7 +21,6 @@
 
 + (instancetype)sharedInstance;
 @property (nonatomic, retain) NSString *editingLocation;
-@property (nonatomic, readonly, strong) HPEditorWindow *editorView;
 @property (nonatomic, readonly, strong) HPEditorViewController *editorViewController;
 
 @property (nonatomic, retain) UIImage *wallpaper;
@@ -33,7 +31,6 @@
 -(UIImage *)blurredMoreBGImage;
 -(void)loadUpImagesFromWallpaper:(UIImage *)image;
 
--(HPEditorWindow *)editorView;
 -(HPEditorViewController *)editorViewController;
 -(void)resetAllValuesToDefaults;
 -(void)showEditorView;

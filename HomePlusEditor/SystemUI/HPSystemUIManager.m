@@ -37,7 +37,7 @@
     if (self)
     {
 
-        self.homeWindow = [[objc_getClass("SBUIController") sharedInstance] window];
+        self.homeWindow = [[kIconController parentViewController] view];
         self.wallpaperWindow = [[objc_getClass("SBWallpaperController") sharedInstance] _window];
         //self.floatingDockWindow = [[kIconController floatingDockController] floatingDockWindow];
 

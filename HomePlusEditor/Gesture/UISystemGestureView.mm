@@ -6,6 +6,7 @@
 #import "UISystemGestureView.h"
 #import "HPGestureManager.h"
 #include "HPManager.h"
+#include "HPUIManager.h"
 #include "HomePlusEditor/Debug/KDBManager.h"
 
 // TODO: this doesn't add overhead but its still a hack. need RE to find a better way.
@@ -23,9 +24,9 @@ static void hooked_layoutSubviews (UISystemGestureView *self, SEL _cmd)
     {
         hasInjectedView = YES;
         [[HPGestureManager sharedInstance] insertGestureRecognizers:self];
-        [[HPManager sharedInstance] performInitialConfiguration];
         [[self superview] addSubview:[[KDBManager sharedInstance] overlayView]];
         [KDBManager.sharedInstance setupOverlayView];
+        // [self addSubview:[[[HPUIManager sharedInstance] editorViewController] view]];
         NSLog(@"Log Overlay Initialized");
 
         NSLog(@"HomePlus: inited");

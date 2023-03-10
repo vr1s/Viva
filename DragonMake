@@ -4,7 +4,7 @@ name: HomePlus Pro
 icmd: sbreload
 depends: mobilesubstrate, preferenceloader
 conflicts: me.kritanta.homeplus
-version: 2.5.4
+version: 2.6.6
 description: Dynamic, live homescreen layout with an intuitive UI
 author: kritanta
 

@@ -5,7 +5,6 @@
 #include "EditorUI/HPControllerView.h"
 #include "HPEditorViewController.h"
 #include "HPEditorViewNavigationTabBar.h"
-#include "HPEditorWindow.h"
 #include "EditorUI/HPUIManager.h"
 
 #include "Config/HPConfigurationManager.h"

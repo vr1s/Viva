@@ -10,7 +10,7 @@
 // TODO: rewrite or at least heavily optimize this file
 // 
 #include "HomePlus.h"
-#include "HomePlusEditor.h"
+#include "HomePlusEditor/HomePlusEditor.h"
 #import "HPLayoutManager.h"
 #include <AudioToolbox/AudioToolbox.h>
 #include "HPConfigSelectionViewController.h"
@@ -414,7 +414,6 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
 - (void)transitionViewsToActivationPercentage:(CGFloat)amount
 {
-    NSLog(@"HomePlus: %f", amount);
     CGFloat fullAmt = (([[UIScreen mainScreen] bounds].size.height) * 0.15);
     //CGFloat topTranslation = 0-fullAmt + (amount * fullAmt);
     CGFloat bottomTranslation = fullAmt - (amount * fullAmt);

@@ -48,7 +48,6 @@ static BOOL hasEnabledOnce = NO;
 @interface HPUIManager () <HPEditorViewControllerDelegate>
 
 @property (nonatomic, readwrite, strong) HPEditorViewController *editorViewController;
-@property (nonatomic, readwrite, strong) HPEditorWindow *editorView;
 
 
 @end
@@ -158,17 +157,6 @@ static BOOL hasEnabledOnce = NO;
     return blurredAndDarkenedImage;
 }
 
-
-- (HPEditorWindow *)editorView 
-{
-    if (!_editorView) 
-    {
-        _editorView = [[HPEditorWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-        _editorView.rootViewController = self.editorViewController;
-    }
-    return _editorView;
-}
-
 - (HPEditorViewController *)editorViewController 
 {
     if (!_editorViewController) 
@@ -177,6 +165,7 @@ static BOOL hasEnabledOnce = NO;
         _editorViewController.delegate = self;
     }
 
+
     return _editorViewController;
 }
 
@@ -184,14 +173,13 @@ static BOOL hasEnabledOnce = NO;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditingModeEnabledNotificationName object:nil];
     [[[HPUIManager sharedInstance] editorViewController] reload];
-    [self editorViewController];
-    [self editorView];
-    _editorView.hidden = NO;
-    _editorView.alpha = 0;
+
+    [_editorViewController view].hidden = NO;
+    [_editorViewController view].alpha = 1;
     [UIView animateWithDuration:.2
         animations:
         ^{
-            _editorView.alpha = 1;
+            [[_editorViewController view] setAlpha:1];
         }
     ];
 
@@ -204,12 +192,12 @@ static BOOL hasEnabledOnce = NO;
 }
 - (void)hideEditorView
 {
-    if (_editorView.hidden == YES)
+    if ([_editorViewController view].hidden)
         return;
     [[NSNotificationCenter defaultCenter] postNotificationName:kEditingModeDisabledNotificationName object:nil];
     [HPConfigurationManager.sharedInstance save];
     [_editorViewController handleDoneSettingsButtonPress:_editorViewController.settingsDoneButton];
-    _editorView.hidden = YES;
+    [_editorViewController view].hidden = YES;
     self.editingLocation = @"SBIconLocationRoot";
     [[self editorViewController] unloadExtensionPanes];
     [[self editorViewController] reload];
@@ -218,7 +206,7 @@ static BOOL hasEnabledOnce = NO;
 - (void)toggleEditorView
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kShowFloatingDockNotificationName object:nil];
-    if (_editorView.hidden) 
+    if ([_editorViewController view].hidden) 
     {
         [self showEditorView];
     } 
@@ -233,12 +221,9 @@ static BOOL hasEnabledOnce = NO;
     [_editorViewController resetAllValuesToDefaults];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HomePlusEditingModeDisabled" object:nil];
     [self hideEditorView];
-    _editorView = nil;
     _editorViewController = nil;
     _editorViewController = [[HPEditorViewController alloc] init];
     _editorViewController.delegate = self;
-    _editorView = [[HPEditorWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    _editorView.rootViewController = self.editorViewController;
 
     [kIconModel layout];
 

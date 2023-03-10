@@ -73,10 +73,13 @@
     return self;
 }
 
--(void)performInitialConfiguration
+-(void)performInitialConfigurationWithView:(UIView*)view
 {
     //if ([DRMManager.sharedInstance active])
-    [[[[[[UIApplication sharedApplication] keyWindow] superview] superview] superview] addSubview:[[HPUIManager sharedInstance] editorView]];
+    [kIconController addChildViewController:[[HPUIManager sharedInstance] editorViewController]];
+    [[[HPUIManager sharedInstance] editorViewController] loadView];
+    [view addSubview:[[[HPUIManager sharedInstance] editorViewController] view]];
+    NSLog(@"Added viewController");
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
     //[HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
     @try {

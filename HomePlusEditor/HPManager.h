@@ -54,7 +54,7 @@
 + (instancetype)sharedInstance;
 - (instancetype)init;
 
-- (void)performInitialConfiguration;
+- (void)performInitialConfigurationWithView:(UIView*)view;
 
 
 @end
