@@ -1,6 +1,6 @@
 # Viva
 
-Viva is a modern, free, open source continuation of the old iOS 14 tweak "Viva Pro"
+Viva is a modern, free, open source continuation of the old iOS 14 tweak "HomePlus Pro"
 
 ### Get this tweak
 
