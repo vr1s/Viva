@@ -11,7 +11,7 @@
 #include <UIKit/UIKit.h>
 
 #import "OBSlider.h"
-#import "HPControllerView.h"
+#import "../HPControllerView.h"
 #include "HPExtensionControllerView.h"
 #include "HPExtension.h"
 #import "HPSettingsTableViewController.h"
@@ -60,6 +60,7 @@
 - (void)resetAllValuesToDefaults;
 - (void)handleSettingsButtonPress:(UIButton*)sender;
 - (void)handleDoneSettingsButtonPress:(UIButton*)sender;
+- (void)settingsViewControllerDidDismiss;
 - (void)handleRootButtonPress:(UIButton*)sender;
 - (void)handleDockButtonPress:(UIButton*)sender;
 - (void)layoutAllSpringboardIcons;

@@ -5,12 +5,13 @@
 #import <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
 #include "HomePlus.h"
-#include "HPDataManager.h"
 
 #ifndef HOMEPLUS_HPLAYOUTMANAGER_H
 #define HOMEPLUS_HPLAYOUTMANAGER_H
 
 @interface HPLayoutManager : NSObject
+
++(SBIconListGridLayoutConfiguration *)defaultConfigurationForIconLocation:(NSString *)iconLocation ;
 +(void)updateCacheForLocation:(NSString *)iconLocation;
 
 + (instancetype)sharedInstance;

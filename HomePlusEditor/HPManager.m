@@ -72,10 +72,19 @@
 
 -(void)performInitialConfiguration
 {
+    //if ([DRMManager.sharedInstance active])
     [[[UIApplication sharedApplication] keyWindow] addSubview:[[HPUIManager sharedInstance] editorView]];
-    [HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
-    [HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
-    [kIconModel layout];
+    //[HPLayoutManager updateCacheForLocation:@"SBIconLocationRoot"];
+    //[HPLayoutManager updateCacheForLocation:@"SBIconLocationDock"];
+    @try {
+        [kIconModel layout];
+    } 
+    @catch (NSException *ex) {
+        // NSInternalInconsistancyException
+        // If we send springboard a gridSize where one of the values is zero, SB will shit itself
+        // There's not much you can do here, except let SB load once without this code, 
+        // And hopefully in the future present an alert letting the user know to reset their config.
+    }
 }
 
 @end

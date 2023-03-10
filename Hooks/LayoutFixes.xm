@@ -1,23 +1,6 @@
 #include "HomePlus.h"
 
-%hook SBIconListModel
-
-- (SBIconListModel *)initWithUniqueIdentifier:(id)uid
-        folder:(SBFolder *)folder
-        gridSize:(SBHIconGridSize)gridSize
-        gridSizeClassSizes:(SBHIconGridSizeClassSizes)sizes
-
-{
-if (gridSize.height == -1)
-{
-SBHIconGridSizeClassSizes fixedSizes = { .small = { .width = 2, .height = 2 }, .medium = { .width = 4, .height = 2 },
-        .large = { .width = 4, .height = 4 }, .extralarge = { .width = 4, .height = 6 } };
-return %orig(uid, folder, gridSize, fixedSizes);
-}
-return %orig(uid, folder, gridSize, sizes);
-}
-%end
-
+%group iOS14
 
 // idk why we're forced to do this
 %hook SBHLibraryCategoriesRootFolder
@@ -29,13 +12,34 @@ return %orig(uid, folder, gridSize, sizes);
         iconGridSizeClassSizes:(SBHIconGridSizeClassSizes)arg5
 {
 
-SBHIconGridSizeClassSizes sizes = { .small = { .width = 2, .height = 2 }, .medium = { .width = 4, .height = 2 },
-        .large = { .width = 4, .height = 4 }, .extralarge = { .width = 4, .height = 6 } };
-
+SBHIconGridSizeClassSizes sizes = { .small = { .columns = 2, .rows = 2 }, .medium = { .columns = 4, .rows = 2 },
+        .large = { .columns = 4, .rows = 4 }, .extralarge = { .columns = 4, .rows = 6 } };
 return %orig(arg1, arg2, arg3, arg4, sizes);
 }
 
 %end
+%end
+
+%group iOS15
+
+// idk why we're forced to do this
+%hook SBHLibraryCategoriesRootFolder
+
+-(SBHLibraryCategoriesRootFolder *)initWithUniqueIdentifier:(id)arg1
+        displayName:(id)arg2
+        maxListCount:(NSUInteger)arg3
+        listGridSize:(SBHIconGridSize)arg4
+        iconGridSizeClassSizes:(SBHIconGridSizeClassSizes *)arg5
+{
+
+SBHIconGridSizeClassSizes sizes = { .small = { .columns = 2, .rows = 2 }, .medium = { .columns = 4, .rows = 2 },
+        .large = { .columns = 4, .rows = 4 }, .extralarge = { .columns = 4, .rows = 6 } };
+    return %orig(arg1, arg2, arg3, arg4, &sizes);
+}
+
+%end
+%end
+
 
 %hook SBIconListView
 -(BOOL)automaticallyAdjustsLayoutMetricsToFit
@@ -48,3 +52,11 @@ return %orig(arg1, arg2, arg3, arg4, sizes);
 return CGSizeMake(27, 35);
 }
 %end
+
+%ctor {
+    if (@available(iOS 15, *))
+        %init(iOS15);
+    else
+        %init(iOS14);
+    %init()
+};

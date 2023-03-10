@@ -13,7 +13,6 @@
 
 #include <UIKit/UIKit.h>
 #include "HomePlus.h"
-#include "HPDataManager.h"
 
 #ifndef HPMANAGER_H
 #define HPMANAGER_H

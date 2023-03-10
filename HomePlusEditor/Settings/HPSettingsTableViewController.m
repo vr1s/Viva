@@ -12,13 +12,15 @@
 #include "HPSettingsTableViewController.h"
 #include "../Utility/HPResources.h"
 #include "../Utility/HPUtility.h"
-#include "../Data/HPConfiguration.h"
-#include "../../Data/HPDataManager.h"
 #include "../HPUIManager.h"
 #include "../Utility/HPTableCell.h"
+#import "HPEditorViewController.h"
 #include "HomePlus.h"
 #include "spawn.h"
 #import "HPLayoutManager.h"
+#import "HPConfigurationManager.h"
+#include "HPConfigurationDirectory.h"
+#include "HPSystemUIManager.h"
 
 static NSArray *_rtCells;
 
@@ -46,11 +48,22 @@ NSArray *getCells();
     [self.tableView reloadData];
 }
 
+- (void)viewWillAppear:(BOOL)animated
+{
+    [[HPSystemUIManager sharedInstance] hideFloatingDockView:YES];
+}
+
+- (void)viewDidDisappear:(BOOL)animated __attribute__((unused))
+{
+    [[HPSystemUIManager sharedInstance] hideFloatingDockView:NO];
+    [self.delegate settingsViewControllerDidDismiss];
+}
+
 - (UITableView *)tableView
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,100,375,1000)];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,100,[[UIScreen mainScreen] bounds].size.width,1000)];
         _tableView.dataSource = self;
         _tableView.delegate = self;
     }
@@ -203,9 +216,8 @@ NSArray *getCells();
 
     key = _rtCells[(NSUInteger) indexPath.section][@"Items"][(NSUInteger) indexPath.row][@"Key"];
 
-    return [[[HPDataManager sharedInstance] currentConfiguration] objectForKey:key]
-                ? [[[HPDataManager sharedInstance] currentConfiguration] boolForKey:key]
-                : NO;
+    NSString *iconLocation =  _rtCells[(NSUInteger) indexPath.section][@"IconLocation"];
+    return [[HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][iconLocation] boolForOption:key];
 }
 
 - (HPTableCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -272,8 +284,11 @@ NSArray *getCells();
             .section][@"Items"][(NSUInteger) [self.tableView
             indexPathForCell:(UITableViewCell *) sender.superview]
             .row][@"Key"];
-    [[[HPDataManager sharedInstance] currentConfiguration] setBool:sender.on
-                                                            forKey:key];
+    NSString *iconLocation =  _rtCells[(NSUInteger) [self.tableView
+            indexPathForCell:(UITableViewCell *) sender.superview]
+            .section][@"IconLocation"];
+    [[HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][iconLocation] setBool:sender.on
+                                                            forOption:key];
 
     [kIconModel layout];
     [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
@@ -296,18 +311,47 @@ NSArray *getCells();
                 case 0: 
                 {
                     UIAlertController * alert = [UIAlertController
-                                    alertControllerWithTitle:[HPUtility localizedItem:@"THIS_WILL_RESET"]
+                                    alertControllerWithTitle:@"This will reset your current loadout!"
                                                     message:[HPUtility localizedItem:@"ARE_YOU_SURE_RESET"]
                                             preferredStyle:UIAlertControllerStyleAlert];
                     UIAlertAction* yesButton = [UIAlertAction
                                         actionWithTitle:@"Yes"
                                                 style:UIAlertActionStyleDefault
                                                 handler:^(UIAlertAction * action) {
-                                                    [[[HPDataManager sharedInstance] currentConfiguration] setInteger:1 forKey:@"HPTutorialGiven"];
-                                                    [[[HPDataManager sharedInstance] currentConfiguration] writeDefaults];
+                                                    [HPConfigurationManager.sharedInstance deleteConfigurationWithName:HPConfigurationManager.sharedInstance.directory.selectedConfigurationName];
+                                                    [HPConfigurationManager.sharedInstance setCurrentConfiguration:[HPConfigurationManager.sharedInstance configurationWithName:HPConfigurationManager.sharedInstance.directory.selectedConfigurationName createIfNecessary:YES]];
+                                                    
+                                                    [HPLayoutManager.sharedInstance initializeCacheOverride];
                                                     [kIconModel layout];
-                                                    [[NSNotificationCenter defaultCenter] postNotificationName:@"HPUpdateLayoutCache" object:nil];
-                                                    [[HPLayoutManager sharedInstance] layoutIconViews];
+                                                    [[[HPUIManager sharedInstance] editorViewController] reload];
+                                                }];
+
+                    UIAlertAction* noButton = [UIAlertAction
+                                            actionWithTitle:@"No"
+                                                    style:UIAlertActionStyleDefault
+                                                    handler:^(UIAlertAction * action) {
+                                                    //Handle no, thanks button                
+                                                    }];
+
+                    [alert addAction:yesButton];
+                    [alert addAction:noButton];
+
+                    [self presentViewController:alert animated:YES completion:nil];
+                    break;
+                }
+                case 1: 
+                {
+                    UIAlertController * alert = [UIAlertController
+                                    alertControllerWithTitle:@"This will delete all loadouts!"
+                                                    message:[HPUtility localizedItem:@"ARE_YOU_SURE_RESET"]
+                                            preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction* yesButton = [UIAlertAction
+                                        actionWithTitle:@"Yes"
+                                                style:UIAlertActionStyleDefault
+                                                handler:^(UIAlertAction * action) {
+                                                    [HPConfigurationManager.sharedInstance reset];
+                                                    [HPLayoutManager.sharedInstance initializeCacheOverride];
+                                                    [kIconModel layout];
                                                     [[[HPUIManager sharedInstance] editorViewController] reload];
                                                 }];
 
@@ -328,13 +372,13 @@ NSArray *getCells();
             }
             break;
         }
-        case 3:
+        case 4:
         {
             switch (indexPath.row)
             {
                 case 0:
                 {
-                    [[[HPDataManager sharedInstance] currentConfiguration] saveConfigurationToFile];
+                    [HPConfigurationManager.sharedInstance save];
                     pid_t pid;
                     int status;
                     const char *args[] = {"sbreload", NULL, NULL, NULL};
@@ -375,36 +419,65 @@ NSArray *getCells()
                             @"Cell":@"Default",
                             @"Title":[HPUtility localizedItem:@"RESET_VALUES"],
                             @"Key":@"RESETVALUES"
+                    },
+                    @{
+                            @"Cell":@"Default",
+                            @"Title":@"Reset All",
+                            @"Key":@"RESETVALUES"
                     }]
             },
             @{
                     @"Cell":@"Section",
-                    @"Title":@"HomeScreen",
+                    @"Title":@"Home Screen",
+                    @"IconLocation":@"SBIconLocationRoot",
                     @"Items":@[
                     @{
                             @"Cell":@"Switch",
                             @"Title":[HPUtility localizedItem:@"HIDE_ICON_LABELS"],
-                            @"Key":@"HPDataIconLabels"
+                            @"Key":@"HideLabels"
                     },
                     @{
                             @"Cell":@"Switch",
                             @"Title":[HPUtility localizedItem:@"HIDE_BADGES"],
-                            @"Key":@"HPDataIconBadges"
+                            @"Key":@"HideBadges"
                     },
                     @{
                             @"Cell":@"Switch",
                             @"Title":@"Hide Page Control",
-                            @"Key":@"HPDataRootHidePageControl"
+                            @"Key":@"HidePageControl"
                     }]
             },
             @{
                     @"Cell":@"Section",
                     @"Title":@"Dock",
+                    @"IconLocation":@"SBIconLocationDock",
                     @"Items":@[
                     @{
                             @"Cell":@"Switch",
-                            @"Title":[HPUtility localizedItem:@"HIDE_DOCK_BG"],
-                            @"Key":@"HPDataDockBG"
+                            @"Title":[HPUtility localizedItem:@"HIDE_BADGES"],
+                            @"Key":@"HideBadges"
+                    }]
+            },
+            @{
+                    @"Cell":@"Section",
+                    @"Title":@"Folders",
+                    @"IconLocation":@"SBIconLocationFolder",
+                    @"Items":@[
+                    
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":[HPUtility localizedItem:@"HIDE_ICON_LABELS"],
+                            @"Key":@"HideLabels"
+                    },
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":[HPUtility localizedItem:@"HIDE_BADGES"],
+                            @"Key":@"HideBadges"
+                    },
+                    @{
+                            @"Cell":@"Switch",
+                            @"Title":@"Hide Page Control",
+                            @"Key":@"HidePageControl"
                     }]
             },
             @{

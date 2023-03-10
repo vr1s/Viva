@@ -19,6 +19,8 @@
 @property (nonatomic, retain)  UIView *homeWindow;
 @property (nonatomic, retain)  UIView *floatingDockWindow;
 @property (nonatomic, retain)  UIView *mockBackgroundView;
+
+-(void)hideFloatingDockView:(BOOL)shouldHide;
 @end
 
 #endif //HOMEPLUS_HPSYSTEMUIMANAGER_H

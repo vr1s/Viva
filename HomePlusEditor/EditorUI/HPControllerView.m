@@ -21,6 +21,8 @@
 #include "HPControllerView.h"
 #import "HPLayoutManager.h"
 #import "HPUtility.h"
+#import "HPPageConfiguration.h"
+#import "HPConfigurationManager.h"
 #include <AudioToolbox/AudioToolbox.h>
 
 
@@ -335,10 +337,11 @@ Properties:
     self.bottomControl.minimumValue = config.bottomControl.itemInfo.min;
     self.bottomControl.maximumValue = config.bottomControl.itemInfo.max;
 
-    NSString *x = [[[HPUIManager sharedInstance] editingLocation] substringFromIndex:14];
-    self.topControl.value = (float) [[[HPDataManager sharedInstance] currentConfiguration] floatForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", x, config.topControl.itemInfo.configKey]];
+
+    HPPageConfiguration *pageConfig = [HPConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][[[HPUIManager sharedInstance] editingLocation]];
+    self.topControl.value = (float) [pageConfig valueForItem:config.topControl.itemInfo.configKey];
     self.topTextField.text = [NSString stringWithFormat:@"%.0f", self.topControl.value];
-    self.bottomControl.value = (float) [[[HPDataManager sharedInstance] currentConfiguration] floatForKey:[NSString stringWithFormat:@"%@%@%@", @"HPData", x, config.bottomControl.itemInfo.configKey]];
+    self.bottomControl.value = (float)  [pageConfig valueForItem:config.bottomControl.itemInfo.configKey];
     self.bottomTextField.text = [NSString stringWithFormat:@"%.0f", self.bottomControl.value];
 }
 

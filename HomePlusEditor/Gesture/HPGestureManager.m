@@ -4,7 +4,7 @@
 
 #import "HPGestureManager.h"
 #import "HPManager.h"
-#import "HPUIManager.h"
+#import "../EditorUI/HPUIManager.h"
 #import "HPUtility.h"
 #import "UISystemGestureView.h"
 #import "HPSystemUIManager.h"
@@ -46,6 +46,8 @@
 
 - (void)insertGestureRecognizers:(UISystemGestureView *)systemGestureView
 {
+    //if (![DRMManager.sharedInstance active])
+    //  return;
     _systemGestureView = systemGestureView;
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activationListener:) name:kEditingModeDisabledNotificationName object:nil];
@@ -57,6 +59,7 @@
     _activeGestureRecognizer.delegate = _systemGestureView;
     _activeGestureRecognizer = pan;
     self.panAmount = 1;
+
 
     self.inactiveGestureRecognizer = pan2;
     FBSDisplayIdentity *displayIdentity = [[[UIScreen mainScreen] displayConfiguration] identity];
@@ -146,7 +149,7 @@
                              animations:^{
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = CGAffineTransformMakeScale(1,1);
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = CGAffineTransformMakeScale(1,1);
-                                 [HPManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1,1);
+                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = CGAffineTransformMakeScale(1,1);
                              }
                              completion:^(BOOL finished)
                              {
@@ -177,11 +180,10 @@
                                  restState.ty=-kMaxAmt;
                                  [HPSystemUIManager sharedInstance].wallpaperWindow.transform = restState;
                                  [HPSystemUIManager sharedInstance].homeWindow.transform = restState;
-                                 [HPManager sharedInstance].floatingDockWindow.transform = restState;
+                                 [HPSystemUIManager sharedInstance].floatingDockWindow.transform = restState;
                              }
                              completion:^(BOOL finished)
                              {
-
                                  self.editorOpened = YES;
                                  self.inactiveGestureRecognizer.enabled = YES;
                                  self.activeGestureRecognizer.enabled = NO;
