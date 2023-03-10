@@ -2,9 +2,7 @@
 // HPUIManager.h
 // HomePlus
 //
-// Global manager for the Editor (and tutorial) views. 
-//
-// Maybe at some point this should be refactored to HPUIManager :)
+// Global manager for the Editor (and tutorial) views.
 //
 // Authors: Kritanta
 // Created  Oct 2019
@@ -78,12 +76,6 @@ static BOOL hasEnabledOnce = NO;
 
 - (void)loadUpImagesFromWallpaper:(UIImage *)image 
 {
-    /*
-    @property (nonatomic, retain) UIImage *wallpaper;
-    @property (nonatomic, retain) UIImage *dynamicallyGeneratedSettingsHeaderImage;
-    @property (nonatomic, retain) UIImage *blurredAndDarkenedWallpaper;
-    @property (nonatomic, retain) UIImage *blurredMoreBackgroundImage;
-    */
     self.wallpaper = image;
     self.blurredAndDarkenedWallpaper = [self bdBackgroundImage];
     self.blurredMoreBackgroundImage = [self blurredMoreBGImage];
@@ -246,7 +238,7 @@ static BOOL hasEnabledOnce = NO;
     _editorView.rootViewController = self.editorViewController;
 
     [kIconModel layout];
-    //if (kCFCoreFoundationVersionNumber < 1600) return;
+
 	pid_t pid;
     const char* args[] = {"killall", "backboardd", NULL};
     posix_spawn(&pid, "/usr/bin/killall", NULL, NULL, (char* const*)args, NULL);
