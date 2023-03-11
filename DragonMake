@@ -32,8 +32,6 @@ Viva:
         - ./VivaEditor/EditorUI/MainEditorView/
         - ./VivaEditor/EditorUI/VIVAControllerViews/
         - ./VivaEditor/Layout/
-        - ./VivaEditor/Extensions/ 
-        - ./VivaEditor/Extensions/ExtensionViews/
         - ./VivaEditor/Gesture/
         - ./VivaEditor/SystemUI/
         - ./VivaEditor/Settings/

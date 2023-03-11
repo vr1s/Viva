@@ -12,8 +12,6 @@
 
 #import "OBSlider.h"
 #import "../VIVAControllerView.h"
-#include "VIVAExtensionControllerView.h"
-#include "VIVAExtension.h"
 #import "VIVASettingsTableViewController.h"
 #import "VIVAEditorViewNavigationTabBar.h"
 
@@ -33,28 +31,18 @@
 @property (nonatomic, readonly, strong) VIVAControllerView *scaleControlView;
 @property (nonatomic, readonly, strong) VIVAControllerView *settingsView;
 
-@property (nonatomic, readonly, strong) VIVAEditorViewNavigationTabBar *tabBar;
-@property (nonatomic, readonly, strong) VIVAEditorViewNavigationTabBar *loadoutTabBar;
+@property (nonatomic, readonly, strong) VIVAEditorViewNavigationTabBar *rightTabBar;
+@property (nonatomic, readonly, strong) VIVAEditorViewNavigationTabBar *leftTabBar;
 @property (nonatomic, readonly, strong) VIVASettingsTableViewController *tableViewController;
-
-@property (nonatomic, retain) VIVAEditorViewNavigationTabBar *extensionBar;
-
-@property (nonatomic, retain) VIVAExtension *activeExtension;
 
 @property (nonatomic, retain) NSMutableArray *rootIconListViewsToUpdate;
 
 @property (nonatomic, retain) NSMutableArray *homeTabControllerViews;
 
 
-
-- (VIVAEditorViewNavigationTabBar *)anExtensionBar;
-- (VIVAEditorViewNavigationTabBar *)customExtensionTabBar;
 - (VIVAEditorViewNavigationTabBar *)defaultTabBar;
-- (void)handleExtensionBarButtonPress:(UIButton *)button;
-- (void)loadExtension:(VIVAExtension *)extension;
-- (void)handleExtensionTabBarButtonPress:(UIButton *)button;
+- (VIVAEditorViewNavigationTabBar *)defaultLeftTabBar;
 - (void)handleDefaultBarTabButtonPress:(UIButton *)button;
-- (void)unloadExtensionPanes;
 - (void)doHighlight:(UIButton*)b;
 - (void)reload;
 - (void)resetAllValuesToDefaults;

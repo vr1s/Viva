@@ -4,7 +4,6 @@
 
 #include "VIVAUIManager.h"
 #include "VIVAManager.h"
-#include "VIVAExtensionManager.h"
 #include "VIVAUtility.h"
 
 #include "UIRootSceneWindow.h"

@@ -25,7 +25,8 @@
 @property (nonatomic, readwrite, strong) VIVAControllerView *scaleControlView;
 @property (nonatomic, readwrite, strong) VIVAControllerView *settingsView;
 
-@property (nonatomic, readwrite, strong) VIVAEditorViewNavigationTabBar *tabBar;
+@property (nonatomic, readwrite, strong) VIVAEditorViewNavigationTabBar *rightTabBar;
+@property (nonatomic, readwrite, strong) VIVAEditorViewNavigationTabBar *leftTabBar;
 
 @property (nonatomic, readwrite, strong) VIVASettingsTableViewController *tableViewController;
 
@@ -59,105 +60,30 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
 
     // Add subviews to self. Any time viewDidLoad is called manually, unload these view beforehand
-    if (self.activeExtension == nil)
-    {
-        [self.view addSubview:[self offsetControlView]];
-        [self.view addSubview:[self spacingControlView]];
-        [self.view addSubview:[self iconCountControlView]];
 
-        [self.view addSubview:[self scaleControlView]];
-        [self.view addSubview:[self settingsView]];
+    [self.view addSubview:[self offsetControlView]];
+    [self.view addSubview:[self spacingControlView]];
+    [self.view addSubview:[self iconCountControlView]];
 
-        // Load the view
-        [self loadControllerView:[self offsetControlView]];
+    [self.view addSubview:[self scaleControlView]];
+    [self.view addSubview:[self settingsView]];
 
+    // Load the view
+    [self loadControllerView:[self offsetControlView]];
 
-        self.tabBar = [self defaultTabBar];
+    self.rightTabBar = [self defaultTabBar];
+    self.leftTabBar = [self defaultLeftTabBar];
 
-        [self handleDefaultBarTabButtonPress:[self.tabBar subviews][0]];
-    }
-    else
-    {
-        self.tabBar = [self customExtensionTabBar];
-        @try
-        {
-            [self handleExtensionTabBarButtonPress:[self.tabBar subviews][0]];
-        }
-        @catch (NSException *ex)
-        {
-            self.activeExtension = nil;
-            [self reload];
-            return;
-        }
-    }
-
-    self.extensionBar = [self anExtensionBar];
-
-    // Set the alpha of the rest to 0
-
-    [self.view addSubview:self.tabBar];
-    [self.view addSubview:self.extensionBar];
-
-    // [[[VIVAGestureManager sharedInstance] systemGestureView] addGestureRecognizer:[[VIVAGestureManager sharedInstance] inactiveGestureRecognizer]];
-}
-
-- (VIVAEditorViewNavigationTabBar *)anExtensionBar
-{
-    VIVAEditorViewNavigationTabBar *extensionBar = [[VIVAEditorViewNavigationTabBar alloc] initWithFrame:CGRectMake(
-            7.5,
-            MENU_BUTTON_TOP_ANCHOR * [[UIScreen mainScreen] bounds].size.height + kDeviceCornerRadius / 2,
-            MENU_BUTTON_SIZE, ([UIScreen mainScreen].bounds.size.height) * (0.7))];
-
-    UIButton *homeButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *homeImage = [VIVAResources extensionHomeToggled:NO];
-    UIImage *homeImageToggled = [VIVAResources extensionHomeToggled:YES];
-    [homeButton setImage:homeImage forState:UIControlStateNormal];
-    [homeButton setImage:homeImageToggled forState:UIControlStateHighlighted];
-    homeButton.frame = CGRectMake(0, 0, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-
-    [extensionBar addSubview:homeButton toTabBarIndex:0];
-
-    NSUInteger index = 1;
-
-    for (VIVAExtension *extension in [[VIVAExtensionManager sharedInstance] extensions])
-    {
-        UIButton *extensionButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *extensionImage = extension.extensionIcon;
-        [extensionButton setImage:extensionImage forState:UIControlStateNormal];
-        extensionButton.frame = CGRectMake(0, MENU_BUTTON_SIZE * index, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-        [extensionBar addSubview:extensionButton toTabBarIndex:index];
-        index++;
-    }
-
-    for (UIButton *button in [extensionBar subviews])
-    {
-        [button addTarget:self
-                   action:@selector(handleExtensionBarButtonPress:)
-         forControlEvents:UIControlEventTouchUpInside];
-        [button addTarget:self
-                   action:@selector(buttonPressDown:)
-         forControlEvents:UIControlEventTouchDown];
-    }
-
-    UIButton *loadoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    UIImage *loadoutImage = [VIVAResources loadoutsToggled:NO];
-    UIImage *loadoutImageToggled = [VIVAResources loadoutsToggled:YES];
-    [loadoutButton setImage:loadoutImage forState:UIControlStateNormal];
-    [loadoutButton setImage:loadoutImageToggled forState:UIControlStateHighlighted];
-    loadoutButton.frame = CGRectMake(0, MENU_BUTTON_SIZE * 2, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-
-    [loadoutButton addTarget:self action:@selector(loadLoadouts:) forControlEvents:UIControlEventTouchUpInside];
-
-    [extensionBar addSubview:loadoutButton toBackwardsTabBarIndex:0];
-
-    return extensionBar;
+    [self handleDefaultBarTabButtonPress:[self.rightTabBar subviews][0]];
+    
+    [self.view addSubview:self.rightTabBar];
+    [self.view addSubview:self.leftTabBar];
 }
 
 - (void)loadLoadouts:(UIButton *)button
 {
-    
     VIVAConfigSelectionViewController *vc = [[VIVAConfigSelectionViewController alloc] initWithNibName:nil bundle:nil];
-    //vc.modalTransitionStyle = UIModalTransitionStyleFlipHorizontal;
+
     [vc viewDidLoad];
     [self presentViewController:vc animated:YES completion:NULL];
 }
@@ -165,47 +91,6 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 - (void)buttonPressDown:(id)arg
 {
     AudioServicesPlaySystemSound(1519);
-}
-
-- (void)unloadExtensionPanes
-{
-    if (self.activeExtension != nil)
-    {
-        [self loadExtension:nil];
-    }
-}
-
-- (VIVAEditorViewNavigationTabBar *)customExtensionTabBar
-{
-    VIVAEditorViewNavigationTabBar *extensionTabBar = [[VIVAEditorViewNavigationTabBar alloc] initWithFrame:CGRectMake(
-            [[UIScreen mainScreen] bounds].size.width - 47.5,
-            MENU_BUTTON_TOP_ANCHOR * [[UIScreen mainScreen] bounds].size.height + kDeviceCornerRadius / 2,
-            MENU_BUTTON_SIZE, ([UIScreen mainScreen].bounds.size.height) * (0.7))];
-
-    NSUInteger index = 0;
-
-    for (VIVAExtensionControllerView *pane in self.activeExtension.extensionControllerViews)
-    {
-        UIButton *paneButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *paneImage = pane.paneIcon;
-        [paneButton setImage:paneImage forState:UIControlStateNormal];
-        paneButton.frame = CGRectMake(0, MENU_BUTTON_SIZE * index, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-        [extensionTabBar addSubview:paneButton];
-        index++;
-    }
-
-    for (UIButton *button in [extensionTabBar subviews])
-    {
-        [button addTarget:self
-                   action:@selector(handleExtensionTabBarButtonPress:)
-         forControlEvents:UIControlEventTouchUpInside];
-        [button addTarget:self
-                   action:@selector(buttonPressDown:)
-         forControlEvents:UIControlEventTouchDown];
-    }
-
-    return extensionTabBar;
-
 }
 
 - (VIVAEditorViewNavigationTabBar *)defaultTabBar
@@ -223,9 +108,8 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     offsetButton.frame = CGRectMake(0, 0 + (kButtonSpacing + MENU_BUTTON_SIZE) * 0, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
     offsetButton.highlighted = YES;
 
-    [tabBar addSubview:offsetButton toBackwardsTabBarIndex:6];
-    // Since the offset view will be the first loaded, we dont need to lower alpha
-    //      on the button. 
+    [tabBar addSubview:offsetButton toTabBarIndex:0];
+    // Since the offset view will be the first loaded, we dont need to lower alpha on the button. 
 
     UIButton *spacerButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *spacerImage = [VIVAResources spacerImageToggled:NO];
@@ -237,7 +121,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
     spacerButton.highlighted = NO;
 
-    [tabBar addSubview:spacerButton toBackwardsTabBarIndex:5];
+    [tabBar addSubview:spacerButton toTabBarIndex:1];
 
     UIButton *iconCountButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *iCImage = [VIVAResources iconCountImageToggled:NO];
@@ -247,7 +131,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     iconCountButton.frame = CGRectMake(0, 0 + (kButtonSpacing + MENU_BUTTON_SIZE) * 2, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
     iconCountButton.highlighted = NO;
 
-    [tabBar addSubview:iconCountButton toBackwardsTabBarIndex:4];
+    [tabBar addSubview:iconCountButton toTabBarIndex:2];
 
     UIButton *scaleButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *sImage = [VIVAResources scaleImageToggled:NO];
@@ -257,7 +141,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     scaleButton.frame = CGRectMake(0, 0 + (kButtonSpacing + MENU_BUTTON_SIZE) * 3, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
     scaleButton.highlighted = NO;
 
-    [tabBar addSubview:scaleButton toBackwardsTabBarIndex:3];
+    [tabBar addSubview:scaleButton toTabBarIndex:3];
 
     UIButton *settingsButton = [UIButton buttonWithType:UIButtonTypeCustom];
     UIImage *settingsImage = [VIVAResources settingsImageToggled:NO];
@@ -267,7 +151,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     settingsButton.frame = CGRectMake(0, 0 + (kButtonSpacing + MENU_BUTTON_SIZE) * (4), MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
     settingsButton.highlighted = NO;
 
-    [tabBar addSubview:settingsButton toTabBarIndex:0];
+    [tabBar addSubview:settingsButton toBackwardsTabBarIndex:0];
 
 
     for (UIButton *button in [tabBar subviews])
@@ -280,99 +164,47 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
          forControlEvents:UIControlEventTouchDown];
     }
 
-    if (![[[VIVAUIManager sharedInstance] editingLocation] isEqualToString:@"SBIconLocationFolder"])
-    {
-
-        self.rootButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *rootImage = [VIVAResources rootImageToggled:NO];
-        UIImage *rootImageToggled = [VIVAResources rootImageToggled:YES];
-        [self.rootButton setImage:rootImage forState:UIControlStateNormal];
-        [self.rootButton setImage:rootImageToggled forState:UIControlStateHighlighted];
-        self.rootButton.frame = CGRectMake(0, 30 + (kButtonSpacing + MENU_BUTTON_SIZE) * 5, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-        self.rootButton.highlighted = YES;
-        [self.rootButton addTarget:self action:@selector(handleRootButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-        [tabBar addSubview:self.rootButton toBackwardsTabBarIndex:1];
-
-        self.dockButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        UIImage *dockImage = [VIVAResources dockImageToggled:NO];
-        UIImage *dockImageToggled = [VIVAResources dockImageToggled:YES];
-        [self.dockButton setImage:dockImage forState:UIControlStateNormal];
-        [self.dockButton setImage:dockImageToggled forState:UIControlStateHighlighted];
-        self.dockButton.frame = CGRectMake(0, 30 + (kButtonSpacing + MENU_BUTTON_SIZE) * 6, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
-        self.dockButton.highlighted = NO;
-        [self.dockButton addTarget:self action:@selector(handleDockButtonPress:) forControlEvents:UIControlEventTouchUpInside];
-
-        [tabBar addSubview:self.dockButton toBackwardsTabBarIndex:0];
-    }
-    else
-    {
-        iconCountButton.enabled = NO;
-    }
-
     self.activeButton = offsetButton;
 
     return tabBar;
 }
 
-- (void)handleExtensionBarButtonPress:(UIButton *)button
+
+- (VIVAEditorViewNavigationTabBar *)defaultLeftTabBar
 {
-    NSUInteger index = [self.extensionBar.subviews indexOfObject:button];
+    VIVAEditorViewNavigationTabBar *tabBar = [[VIVAEditorViewNavigationTabBar alloc] initWithFrame:CGRectMake(
+            8.75,
+            MENU_BUTTON_TOP_ANCHOR * [[UIScreen mainScreen] bounds].size.height + kDeviceCornerRadius / 2,
+            MENU_BUTTON_SIZE, ([UIScreen mainScreen].bounds.size.height) * (0.7))];
 
-    if (index <= 0 || [[[VIVAExtensionManager sharedInstance] extensions] count] == 0)
-    {
-        [self loadExtension:nil];
-    }
-    else
-    {
-        [self loadExtension:[[VIVAExtensionManager sharedInstance] extensions][index - 1]];
-    }
-}
+    self.rootButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *rootImage = [VIVAResources rootImageToggled:NO];
+    UIImage *rootImageToggled = [VIVAResources rootImageToggled:YES];
+    [self.rootButton setImage:rootImage forState:UIControlStateNormal];
+    [self.rootButton setImage:rootImageToggled forState:UIControlStateHighlighted];
+    self.rootButton.frame = CGRectMake(0, 30 + (kButtonSpacing + MENU_BUTTON_SIZE) * 5, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
+    self.rootButton.highlighted = YES;
+    [self.rootButton addTarget:self action:@selector(handleRootButtonPress:) forControlEvents:UIControlEventTouchUpInside];
+    [tabBar addSubview:self.rootButton toTabBarIndex:0];
 
-- (void)loadExtension:(VIVAExtension *)extension
-{
-    self.activeExtension = extension;
-    [self reload];
-    [self transitionViewsToActivationPercentage:1];
-    int _ = 1;
-    for (VIVAExtensionControllerView *controller in extension.extensionControllerViews)
-    {
-        controller.alpha = 0;
-        if (_ == 1)
-        {
-            controller.alpha = 1.0;
-            _ = 0;
-        } // set the first controller to have a 1 alpha
-        [self.view addSubview:controller];
-    }
+    self.dockButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *dockImage = [VIVAResources dockImageToggled:NO];
+    UIImage *dockImageToggled = [VIVAResources dockImageToggled:YES];
+    [self.dockButton setImage:dockImage forState:UIControlStateNormal];
+    [self.dockButton setImage:dockImageToggled forState:UIControlStateHighlighted];
+    self.dockButton.frame = CGRectMake(0, 30 + (kButtonSpacing + MENU_BUTTON_SIZE) * 6, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
+    self.dockButton.highlighted = NO;
+    [self.dockButton addTarget:self action:@selector(handleDockButtonPress:) forControlEvents:UIControlEventTouchUpInside];
 
-    [self.view bringSubviewToFront:self.tabBar];
-    [self.view bringSubviewToFront:self.extensionBar];
-}
+    [tabBar addSubview:self.dockButton toTabBarIndex:1];
 
-- (void)handleExtensionTabBarButtonPress:(UIButton *)button
-{
-    NSUInteger index = [self.tabBar.subviews indexOfObject:button];
-
-    [self loadControllerView:self.activeExtension.extensionControllerViews[index]];
-
-    self.activeButton.userInteractionEnabled = YES;
-
-    [UIView animateWithDuration:.2
-                     animations:
-                             ^
-                             {
-                                 button.alpha = 1;
-                             }
-    ];
-
-    self.activeButton = button;
-    button.userInteractionEnabled = NO;
+    return tabBar;
 }
 
 - (void)handleDefaultBarTabButtonPress:(UIButton *)button
 {
     AudioServicesPlaySystemSound(1519);
-    NSUInteger index = [self.tabBar.subviews indexOfObject:button];
+    NSUInteger index = [self.rightTabBar.subviews indexOfObject:button];
 
     if (index < 4)
     {
@@ -420,8 +252,8 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
     bottomTranslation *= 2;
     self.activeView.topView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, bottomTranslation);
     self.activeView.bottomView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, bottomTranslation);
-    self.tabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (50 - (50 * amount)), 0);
-    self.extensionBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (-50 + (50 * amount)), 0);
+    self.rightTabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (50 - (50 * amount)), 0);
+    self.leftTabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (-50 + (50 * amount)), 0);
 }
 
 - (void)transitionViewsToActivationPercentage:(CGFloat)amount withDuration:(CGFloat)duration
@@ -436,8 +268,8 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
                                  bottomTranslation *= 2;
                                  self.activeView.topView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, bottomTranslation);
                                  self.activeView.bottomView.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, 0, bottomTranslation);
-                                 self.tabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (50 - (50 * amount)), 0);
-                                 self.extensionBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (-50 + (50 * amount)), 0);
+                                 self.rightTabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (50 - (50 * amount)), 0);
+                                 self.leftTabBar.transform = CGAffineTransformTranslate(CGAffineTransformIdentity, (-50 + (50 * amount)), 0);
                              }
     ];
 }

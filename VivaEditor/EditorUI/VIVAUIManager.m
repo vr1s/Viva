@@ -199,7 +199,6 @@ static BOOL hasEnabledOnce = NO;
     [_editorViewController handleDoneSettingsButtonPress:_editorViewController.settingsDoneButton];
     [_editorViewController view].hidden = YES;
     self.editingLocation = @"SBIconLocationRoot";
-    [[self editorViewController] unloadExtensionPanes];
     [[self editorViewController] reload];
 }
 

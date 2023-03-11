@@ -8,8 +8,6 @@
 #include "EditorUI/VIVAUIManager.h"
 
 #include "Config/VIVAConfigurationManager.h"
-#include "Extensions/VIVAExtension.h"
-#include "Extensions/VIVAExtensionManager.h"
 
 #include "Gesture/VIVAGestureManager.h"
 

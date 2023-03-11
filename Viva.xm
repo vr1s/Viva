@@ -11,7 +11,6 @@
 //
 
 #include "VIVAUIManager.h"
-#include "VIVAExtensionManager.h"
 #include "VIVAConfigurationManager.h"
 #include "VIVALayoutManager.h"
 #include "VIVAManager.h"
