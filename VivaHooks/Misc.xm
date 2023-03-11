@@ -126,6 +126,24 @@
 
 %end
 
+
+%hook SBIconView
+
+-(void)configureForLabelAllowed:(BOOL)allowed
+{
+    if ([self.location isEqualToString:@"SBIconLocationRoot"])
+    {
+        if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels)
+        {
+            %orig(NO);
+            return;
+        }
+    }
+    %orig;
+}
+
+%end
+
 %hook SBHIconManager
 
 -(BOOL)iconViewDisplaysLabel:(SBIconView*)icon 

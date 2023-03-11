@@ -81,7 +81,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     {
         [[VIVALayoutManager sharedInstance] layoutIndividualIcons];
     }
-    if ([key isEqualToString:@"Rows"])
+    if ([key isEqualToString:@"Rows"] || [key isEqualToString:@"HideLabels"])
     {
         [kIconModel layout];
     }
