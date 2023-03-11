@@ -94,30 +94,11 @@
 
 %end
 
-
-%hook SBIconView
-
--(void)configureForLabelAllowed:(BOOL)allowed
-{
-    if ([self.location isEqualToString:@"SBIconLocationRoot"])
-    {
-        if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels)
-        {
-            %orig(NO);
-            //[self setIconLabelAlpha:0];
-            return;
-        }
-    }
-    %orig;
-}
-
-%end
-
 %hook SBIconController
 
 -(BOOL)iconManager:(id)arg1 allowsBadgingForIconLocation:(NSString *)location
 {
-    if ([location isEqualToString:@"SBIconLocationRoot"])
+    if ([location isEqualToString:@"SBIconLocationRoot"] || [location isEqualToString:@"SBIconLocationRootWithWidgets"])
     {
         if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideBadges)
         {
@@ -146,6 +127,28 @@
 %end
 
 %hook SBHIconManager
+
+-(BOOL)iconViewDisplaysLabel:(SBIconView*)icon 
+{
+    NSString* location = [icon location];
+
+    if ([location isEqualToString:@"SBIconLocationRoot"] || [location isEqualToString:@"SBIconLocationRootWithWidgets"])
+    {
+        if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels)
+        {
+            return NO;
+        }
+    }
+    if ([location isEqualToString:@"SBIconLocationDock"])
+    {
+        if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationDock"].layoutOptions.hideLabels)
+        {
+            return NO;
+        }
+    }
+
+    return %orig(icon);
+}
 
 -(NSUInteger)iconModel:(id)arg0 maxRowCountForListInRootFolderWithInterfaceOrientation:(NSInteger)arg1
 {
