@@ -7,6 +7,7 @@
 #import "VIVAConfigurationDirectory.h"
 #import "VIVAPageConfiguration.h"
 #include "VIVALayoutManager.h"
+#include "VivaUtility.h"
 
 
 @interface VIVAConfigurationManager ()
@@ -129,7 +130,7 @@
     VIVALayoutConfiguration layoutConfig = { .pageInsets=UIOffsetZero, .pageSpacing=UIOffsetZero, .iconImageInfo={
         .size = CGSizeMake(60, 60),
         .scale = {3},
-        .continuousCornerRadius = {13.5}}, .iconGridSize={.rows=6, .columns=4}};
+        .continuousCornerRadius = {13.5}}, .iconGridSize={.rows=[VIVAUtility defaultRows], .columns=4}};
     VIVALayoutOptions layoutOptions = {.hidePageControl=0, .hideLabels=0, .hideBadges=0};
 
     VIVAPageConfiguration *pageConfiguration = [[VIVAPageConfiguration alloc] initWithLayoutConfiguration:layoutConfig layoutOptions:layoutOptions];
@@ -149,8 +150,6 @@
     VIVAPageConfiguration *dockPageConfiguration = [[VIVAPageConfiguration alloc] initWithLayoutConfiguration:dockLayoutConfig layoutOptions:dockLayoutOptions];
 
     pageConfigs[@"SBIconLocationDock"]=dockPageConfiguration;
-
-
 
     NSMutableDictionary *indexSpecificConfigurations = [[NSMutableDictionary alloc] init];
     pageConfigs[@"IndexSpecificConfigurations"] = indexSpecificConfigurations;

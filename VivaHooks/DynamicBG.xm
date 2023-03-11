@@ -13,7 +13,7 @@
 %hook UIRootSceneWindow
 
 //
-// iOS 13 - Dynamic editor background
+// iOS 13-16 - Dynamic editor background
 // We use this to set the background image for the editor
 //
 

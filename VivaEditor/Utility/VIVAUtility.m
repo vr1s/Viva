@@ -241,7 +241,7 @@
     NSInteger rows = [[deviceNamesByCode valueForKey:code] intValue];
 
     if (!rows) {
-        rows = 5;
+        rows = 6;
     }
 
     return rows;

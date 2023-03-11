@@ -198,6 +198,17 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
     [tabBar addSubview:self.dockButton toTabBarIndex:1];
 
+    UIButton *loadoutButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    UIImage *loadoutImage = [VIVAResources loadoutsToggled:NO];
+    UIImage *loadoutImageToggled = [VIVAResources loadoutsToggled:YES];
+    [loadoutButton setImage:loadoutImage forState:UIControlStateNormal];
+    [loadoutButton setImage:loadoutImageToggled forState:UIControlStateHighlighted];
+    loadoutButton.frame = CGRectMake(0, MENU_BUTTON_SIZE * 2, MENU_BUTTON_SIZE, MENU_BUTTON_SIZE);
+
+    [loadoutButton addTarget:self action:@selector(loadLoadouts:) forControlEvents:UIControlEventTouchUpInside];
+
+    [tabBar addSubview:loadoutButton toBackwardsTabBarIndex:0];
+
     return tabBar;
 }
 

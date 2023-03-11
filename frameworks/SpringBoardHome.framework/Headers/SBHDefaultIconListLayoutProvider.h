@@ -49,7 +49,7 @@ NSMutableDictionary *_cachedListLayouts;
 -(id)descriptionBuilderWithMultilinePrefix:(id)arg0 ;
 -(id)initWithLayoutOptions:(NSUInteger)arg0 ;
 +(NSUInteger)currentDeviceScreenType;
-+(id)frameworkFallbackInstance;
++(SBHDefaultIconListLayoutProvider*)frameworkFallbackInstance;
 
 
 @end

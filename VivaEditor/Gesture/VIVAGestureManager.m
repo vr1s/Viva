@@ -214,6 +214,7 @@
         [VIVASystemUIManager sharedInstance].homeWindow.layer.cornerRadius = [VIVAUtility isCurrentDeviceNotched] ? 35 : 0;
         [VIVASystemUIManager sharedInstance].wallpaperWindow.layer.cornerRadius = [VIVAUtility isCurrentDeviceNotched] ? 35 : 0;
         [VIVASystemUIManager sharedInstance].wallpaperWindow.layer.masksToBounds = YES;
+        [VIVASystemUIManager sharedInstance].homeWindow.layer.masksToBounds = YES;
         [VIVASystemUIManager sharedInstance].homeWindow.layer.cornerCurve = kCACornerCurveContinuous;
         [VIVASystemUIManager sharedInstance].wallpaperWindow.layer.cornerCurve = kCACornerCurveContinuous;
     }
@@ -222,6 +223,7 @@
         [VIVASystemUIManager sharedInstance].homeWindow.layer.cornerRadius = 0;
         [VIVASystemUIManager sharedInstance].wallpaperWindow.layer.cornerRadius = 0;
         [VIVASystemUIManager sharedInstance].wallpaperWindow.layer.masksToBounds = NO;
+        [VIVASystemUIManager sharedInstance].homeWindow.layer.masksToBounds = NO;
     }
 
     if (self.panAmount >= maxAmt)

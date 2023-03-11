@@ -65,7 +65,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     self = [super init];
     if (self)
     {
-        self.defaultProvider = [[objc_getClass("SBHDefaultIconListLayoutProvider") alloc] initWithScreenType:3];
+        self.defaultProvider = [[objc_getClass("SBHDefaultIconListLayoutProvider") alloc] initWithScreenType:[[objc_getClass("SBHDefaultIconListLayoutProvider") class] frameworkFallbackInstance].screenType];
         self.readyForIconModelSwap = NO;
     }
 
@@ -83,7 +83,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     }
     if ([key isEqualToString:@"Rows"])
     {
-        //[kIconModel layout];
+        [kIconModel layout];
     }
 }
 
