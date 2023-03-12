@@ -66,7 +66,7 @@ NSArray *getCells();
 {
     if (!_tableView)
     {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,100,[[UIScreen mainScreen] bounds].size.width,1000)];
+        _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0,100,[[UIScreen mainScreen] bounds].size.width,[[UIScreen mainScreen] bounds].size.height-200)];
         _tableView.dataSource = self;
         _tableView.delegate = self;
     }
