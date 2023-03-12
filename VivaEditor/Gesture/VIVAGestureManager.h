@@ -5,13 +5,16 @@
 @import Foundation;
 @import UIKit;
 #import <objc/NSObject.h>
-#include "UISystemGestureView.h"
 
 @class VIVAHitboxView;
 @class VIVAHitboxWindow;
 
 #ifndef VIVA_VIVAGESTURERECOGNIZERVIEW_H
 #define VIVA_VIVAGESTURERECOGNIZERVIEW_H
+
+
+@interface UISystemGestureView : UIView 
+@end
 
 @interface SBMainDisplaySystemGestureRecognizer : NSObject
 +(SBMainDisplaySystemGestureRecognizer *)mainDisplayManager;
@@ -49,7 +52,8 @@
 
 + (instancetype)sharedInstance;
 
-- (void)insertGestureRecognizers:(UISystemGestureView *)systemGestureView;
+- (void)insertGestureRecognizers:(_UISystemGestureManager *)gestureManager;
+- (void)setSystemGestureView:(UISystemGestureView *)systemGestureView;
 
 - (void)handlePinchGesture:(UIPinchGestureRecognizer *)gestureRecognizer;
 @end

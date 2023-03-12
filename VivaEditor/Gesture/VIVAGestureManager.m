@@ -6,7 +6,6 @@
 #import "VIVAManager.h"
 #import "../EditorUI/VIVAUIManager.h"
 #import "VIVAUtility.h"
-#import "UISystemGestureView.h"
 #include "VIVALayoutManager.h"
 #import "VIVASystemUIManager.h"
 #import <AudioToolbox/AudioToolbox.h>
@@ -39,27 +38,28 @@
     return sharedInstance;
 }
 
-- (void)insertGestureRecognizers:(UISystemGestureView *)systemGestureView
+- (void)setSystemGestureView:(UISystemGestureView *)systemGestureView
 {
     _systemGestureView = systemGestureView;
     NSLog(@"Configured Gesture View");
+}
 
+
+- (void)insertGestureRecognizers:(_UISystemGestureManager *)gestureManager
+{
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(activationListener:) name:kEditingModeDisabledNotificationName object:nil];
 
     UIPinchGestureRecognizer *pan = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
     UIPinchGestureRecognizer *pan2 = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(handlePinchGesture:)];
 
     pan2.enabled = NO;
-    _activeGestureRecognizer.delegate = _systemGestureView;
     _activeGestureRecognizer = pan;
     self.panAmount = 1;
 
-
-    _inactiveGestureRecognizer.delegate = _systemGestureView;
     _inactiveGestureRecognizer = pan2;
     FBSDisplayIdentity *displayIdentity = [[[UIScreen mainScreen] displayConfiguration] identity];
-    [[_UISystemGestureManager sharedInstance] addGestureRecognizer:_activeGestureRecognizer toDisplayWithIdentity:displayIdentity];
-    [[_UISystemGestureManager sharedInstance] addGestureRecognizer:_inactiveGestureRecognizer toDisplayWithIdentity:displayIdentity];
+    [gestureManager addGestureRecognizer:_activeGestureRecognizer toDisplayWithIdentity:displayIdentity];
+    [gestureManager addGestureRecognizer:_inactiveGestureRecognizer toDisplayWithIdentity:displayIdentity];
 }
 
 
