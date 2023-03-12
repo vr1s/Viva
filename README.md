@@ -2,6 +2,8 @@
 
 Viva is a modern, free, open source continuation of the old iOS 14 tweak "HomePlus Pro" by the original author.
 
+It provides precise, intuitive homescreen layout editing on iOS 13 - 16
+
 ### Get this tweak
 
 Repo: 

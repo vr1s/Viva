@@ -18,6 +18,15 @@
 #include <SpringBoardHome/SBDockIconListView.h>
 #include <SpringBoardHome/SBDockView.h>
 
+typedef struct SBHIconGridSizeClassIconImageInfos {
+    SBIconImageInfo icon;
+    SBIconImageInfo small;
+    SBIconImageInfo medium;
+    SBIconImageInfo large;
+    SBIconImageInfo newsLargeTall;
+    SBIconImageInfo extraLarge;
+} SBHIconGridSizeClassIconImageInfos;
+
 #define kListLayoutProvider [[[objc_getClass("SBIconController") sharedInstance] iconManager] listLayoutProvider]
 #define ConfigForLocation(location) [(SBIconListGridLayout *)[kListLayoutProvider layoutForIconLocation:location] \
 layoutConfiguration]
@@ -77,11 +86,9 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     [[VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][location] setConfigItem:key toValue:value];
     [VIVALayoutManager updateCacheForLocation:location];
     [[VIVALayoutManager sharedInstance] layoutIconViews];
-    if ([key isEqualToString:@"IconScale"])
-    {
-        [[VIVALayoutManager sharedInstance] layoutIndividualIcons];
-    }
-    if ([key isEqualToString:@"Rows"] || [key isEqualToString:@"HideLabels"])
+    // thinking
+    // destroying root folder on rebuild sucks. maybe we can find a way to *just* trigger a rebuild of icon views.  
+    if ([key isEqualToString:@"Rows"] || [key isEqualToString:@"HideLabels"] || [key isEqualToString:@"IconScale"])
     {
         [kIconModel layout];
     }
@@ -107,6 +114,9 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 + (void)updateCacheForLocation:(NSString *)iconLocation
 {
     SBIconListFlowLayout *layout = VIVALayoutManager.sharedInstance.overlayConfigs[iconLocation];
+
+    SBIconListGridLayoutConfiguration *og = [VIVALayoutManager defaultConfigurationForIconLocation:iconLocation];
+
     // NSLog(@"%@", [layout description]);
     SBIconListGridLayoutConfiguration *config = [layout layoutConfiguration];
     SBIconListGridLayoutConfiguration *mgrConfig = ConfigForLocation(iconLocation);
@@ -173,6 +183,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     config.portraitLayoutInsets = calculatedInsets;
     mgrConfig.portraitLayoutInsets = calculatedInsets;
 
+    
     SBIconImageInfo info = {
         .size = pageConfig.layoutConfiguration.iconImageInfo.size,
         .scale = {3},
@@ -180,6 +191,22 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     };
     config.iconImageInfo = info;
     mgrConfig.iconImageInfo = info;
+
+
+    if (@available(iOS 15, *))
+    {
+        struct SBHIconGridSizeClassIconImageInfos sizes;
+
+        NSValue* szValue = [config valueForKey:@"_iconGridSizeClassIconImageInfos"];
+        [szValue getValue:&sizes];
+
+        sizes.icon = info;
+
+        // _iconGridSizeClassIconImageInfos
+        [config setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassIconImageInfos)] forKey:@"_iconGridSizeClassIconImageInfos"];
+        [mgrConfig setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassIconImageInfos)] forKey:@"_iconGridSizeClassIconImageInfos"];
+    }
+    
 }
 
 -(SBIconListFlowLayout *)layoutForIconLocation:(NSString* )iconLocation
@@ -214,7 +241,10 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 
 - (void)doSharedEditorClosedTasks
 {
-    //[kIconModel layout];
+    [self layoutIconViews];
+    [self layoutIndividualIcons];
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VIVAResetIconScale" object:nil];
+    [kIconModel layout];
 }
 
 -(void)layoutIconViews
@@ -260,13 +290,17 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 -(void)layoutIndividualIcons
 {
     BOOL hideLabels = (BOOL)[VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels;
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"VIVAUpdateIconScale" object:nil];
     for (SBIconListView *list in [kRootFolderController iconListViews])
     {
         for (SBIconView *icon in [list subviews])
         {
-            if (![icon isMemberOfClass:objc_getClass("SBIconView")])
+            if (![icon isMemberOfClass:objc_getClass("UIView")])
                 return;
             [icon layoutSubviews];
+            if (![icon isMemberOfClass:objc_getClass("SBIconView")])
+                return;
             [icon configureForLabelAllowed:!hideLabels];
         }
     }

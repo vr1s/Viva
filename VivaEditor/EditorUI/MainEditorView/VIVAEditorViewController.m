@@ -207,7 +207,7 @@ const CGFloat TABLE_HEADER_HEIGHT = 0.458;
 
     [loadoutButton addTarget:self action:@selector(loadLoadouts:) forControlEvents:UIControlEventTouchUpInside];
 
-    [tabBar addSubview:loadoutButton toBackwardsTabBarIndex:0];
+    // [tabBar addSubview:loadoutButton toBackwardsTabBarIndex:0];
 
     return tabBar;
 }

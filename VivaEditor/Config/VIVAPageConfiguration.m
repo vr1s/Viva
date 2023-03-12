@@ -32,7 +32,7 @@
     else if ([item isEqualToString:@"Columns"])
         _layoutConfiguration.iconGridSize.columns = value;
     else if ([item isEqualToString:@"IconScale"])
-        _layoutConfiguration.iconImageInfo.size = CGSizeMake(60*(value/100), 60*(value/100));
+        _layoutConfiguration.iconImageInfo.size = CGSizeMake(60.0*(value/100.0), 60.0*(value/100.0));
 }
 
 - (NSInteger)valueForItem:(NSString *)item
@@ -50,7 +50,7 @@
     else if ([item isEqualToString:@"Columns"])
         return _layoutConfiguration.iconGridSize.columns ?: 1;
     else if ([item isEqualToString:@"IconScale"])
-        return _layoutConfiguration.iconImageInfo.size.width/60*100 ?: 60;
+        return _layoutConfiguration.iconImageInfo.size.width/60.0*100.0 ?: 60.0;
     return 0;
 }
 
@@ -101,6 +101,7 @@
         UIOffset pageInsets = [coder decodeUIOffsetForKey:@"PageInsets"];
         UIOffset pageSpacing = [coder decodeUIOffsetForKey:@"PageSpacing"];
         CGRect imageInfo = [coder decodeCGRectForKey:@"IconImageInfo"];
+        NSLog(@"imageInfo: %@", NSStringFromCGRect(imageInfo));
 
         BOOL hideBadges = [coder decodeBoolForKey:@"HideBadges"];
         BOOL hideLabels = [coder decodeBoolForKey:@"HideLabels"];

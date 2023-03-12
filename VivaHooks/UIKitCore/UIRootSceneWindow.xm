@@ -1,11 +1,6 @@
-#include <Foundation/Foundation.h>
 #include <UIKit/UIKit.h>
-#include "Viva.h"
 
 #include "VIVAUIManager.h"
-#include "VIVAManager.h"
-#include "VIVAUtility.h"
-
 #include "UIRootSceneWindow.h"
 
 #pragma mark Dynamic Window Background
@@ -33,4 +28,3 @@
 }
 
 %end
-

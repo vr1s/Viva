@@ -5,7 +5,7 @@ icmd: sbreload
 depends: mobilesubstrate, preferenceloader
 conflicts: me.kritanta.homeplus, me.kritanta.homepluspro
 version: 3.0.0
-description: Dynamic, live homescreen layout with an intuitive UI
+description: Dynamic layout editor for iOS 13-16.3.1
 author: vrisk/a
 
 all:
@@ -40,7 +40,7 @@ Viva:
     wild_recurse: Yes
     ldflags: "-ObjC"
     files:
-        - VivaHooks/*.xm
+        - "VivaHooks/**/*.xm"
         - Viva.xm
         - "VivaEditor/**/*.m"
         - "VivaEditor/**/*.mm"
