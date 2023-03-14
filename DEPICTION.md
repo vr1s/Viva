@@ -12,5 +12,4 @@ Pinch the homescreen to edit your layout.
 
 ### Known Issues
 
-There's noticable lag on setting the scale of icons currently. 
-This is because Viva uses a more robust method of scaling them that requires rebuilding the images when edited, but avoids any visual bugs or performance overhead later.
+Slight visual bug on opening folders.

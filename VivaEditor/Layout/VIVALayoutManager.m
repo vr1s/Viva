@@ -88,9 +88,21 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     [[VIVALayoutManager sharedInstance] layoutIconViews];
     // thinking
     // destroying root folder on rebuild sucks. maybe we can find a way to *just* trigger a rebuild of icon views.  
-    if ([key isEqualToString:@"Rows"] || [key isEqualToString:@"HideLabels"] || [key isEqualToString:@"IconScale"])
+    if ([key isEqualToString:@"HideLabels"] || [key isEqualToString:@"IconScale"])
     {
-        [kIconModel layout];
+        [[VIVALayoutManager sharedInstance] layoutIndividualIcons];
+        // [kRootFolderView _resetIconListViews];
+        // [kIconManager _finishResetRootIconListsReusingPreviousControllers:NO];
+    }
+
+    if (@available(iOS 15, *)){}
+    else // iOS 14 ONLY! this is unstable on higher versions
+         // thankfully, iOS 15 gives us a very nice call we use elsewhere to bump icons :)))
+    {
+        if ([key isEqualToString:@"Rows"] || [key isEqualToString:@"Columns"])
+        {
+            [kIconModel layout];
+        }
     }
 }
 
@@ -183,7 +195,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
     config.portraitLayoutInsets = calculatedInsets;
     mgrConfig.portraitLayoutInsets = calculatedInsets;
 
-    
+    /*
     SBIconImageInfo info = {
         .size = pageConfig.layoutConfiguration.iconImageInfo.size,
         .scale = {3},
@@ -206,6 +218,7 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
         [config setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassIconImageInfos)] forKey:@"_iconGridSizeClassIconImageInfos"];
         [mgrConfig setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassIconImageInfos)] forKey:@"_iconGridSizeClassIconImageInfos"];
     }
+    */
     
 }
 
@@ -243,8 +256,10 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 {
     [self layoutIconViews];
     [self layoutIndividualIcons];
-    [[NSNotificationCenter defaultCenter] postNotificationName:@"VIVAResetIconScale" object:nil];
-    [kIconModel layout];
+
+    // Destroys dock: [kRootFolderView _resetIconListViews];
+    // Breaks widgets: [kIconManager _finishResetRootIconListsReusingPreviousControllers:NO];
+    // 
 }
 
 -(void)layoutIconViews
@@ -261,13 +276,17 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
         size.rows = loadoutValueRows;
         size.columns = loadoutValueColumns;
 
-        [model setValue:[NSValue value:&size withObjCType:@encode(struct SBHIconGridSize)] forKey:@"_gridSize"];
+        if (@available(iOS 15, *)) {
+            [model changeGridSize:size options:0];
+        }
+        else {
+            [model setValue:[NSValue value:&size withObjCType:@encode(struct SBHIconGridSize)] forKey:@"_gridSize"];
+        }
 
         SBHIconGridSizeClassSizes sizes = { .small = { .columns = (short)widgetWidth(2, loadoutValueColumns), .rows = 2 },
                                             .medium = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 2 },
                                             .large = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 },
-                                            .extraLarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6
-                } };
+                                            .extraLarge = { .columns = (short)widgetWidth(4, loadoutValueColumns), .rows = 6 } };
 
         [model setValue:[NSValue value:&sizes withObjCType:@encode(struct SBHIconGridSizeClassSizes)] forKey:@"_gridSizeClassSizes"];
     }
@@ -289,20 +308,28 @@ NSInteger widgetWidth(NSInteger size, NSInteger cols)
 
 -(void)layoutIndividualIcons
 {
-    BOOL hideLabels = (BOOL)[VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels;
-    
     [[NSNotificationCenter defaultCenter] postNotificationName:@"VIVAUpdateIconScale" object:nil];
+    BOOL hideLabels = (BOOL)[VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels;
+    NSUInteger loadoutValueColumns = [VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.columns;
+    
     for (SBIconListView *list in [kRootFolderController iconListViews])
     {
+        BOOL reshow = NO;
+        if (list.visibleColumnRange.length > 0)
+        {
+            [list hideAllIcons];
+            reshow = YES;
+        }
         for (SBIconView *icon in [list subviews])
         {
-            if (![icon isMemberOfClass:objc_getClass("UIView")])
-                return;
-            [icon layoutSubviews];
             if (![icon isMemberOfClass:objc_getClass("SBIconView")])
-                return;
+                continue;
+            [icon setNeedsLayout];
+            [icon layoutSubviews];
             [icon configureForLabelAllowed:!hideLabels];
         }
+        if (reshow)
+            [list showAllIcons];
     }
 }
 @end

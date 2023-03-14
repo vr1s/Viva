@@ -167,6 +167,8 @@ static void preferencesChanged()
 {
     preferencesChanged();
 
+    // enableLogging();
+
     CFNotificationCenterAddObserver(
         CFNotificationCenterGetDarwinNotifyCenter(),
         &observer,

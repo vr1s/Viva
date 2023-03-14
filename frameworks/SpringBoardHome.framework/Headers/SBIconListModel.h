@@ -151,6 +151,8 @@
 -(void)sortUsingComparator:(id)arg0 ;
 -(void)sortUsingSelector:(SEL)arg0 ;
 
+// iOS 15+
+-(id)changeGridSize:(struct SBHIconGridSize )arg0 options:(NSUInteger)arg1 ;
 
 @end
 
