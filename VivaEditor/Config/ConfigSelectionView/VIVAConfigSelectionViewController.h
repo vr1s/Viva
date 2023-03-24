@@ -3,7 +3,7 @@
 //
 
 #import <Foundation/Foundation.h>
-@import UIKit;
+#include <UIKit/UIKit.h>
 
 #ifndef VIVA_VIVACONFIGSELECTIONVIEWCONTROLLER_H
 #define VIVA_VIVACONFIGSELECTIONVIEWCONTROLLER_H

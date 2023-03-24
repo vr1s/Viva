@@ -2,9 +2,6 @@
 // Created by vrisk/a on 6/25/21.
 //
 
-@import Foundation;
-@import UIKit;
-
 #ifndef VIVA_VIVASYSTEMUIMANAGER_H
 #define VIVA_VIVASYSTEMUIMANAGER_H
 

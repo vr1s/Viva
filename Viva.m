@@ -31,33 +31,33 @@ NSDictionary *prefs = nil;
 
 static BOOL performedInitialConfiguration;
 
-%hook SBHomeScreenView
+@hook SBHomeScreenView
 - (void)movedToSuperview:(UIView*)view
 {
-    %orig;
+    @orig(view);
 
     [[VIVAManager sharedInstance] performInitialConfigurationWithView:view];
 }
-%end
+@end
 
-%hook SBRootFolderControllerConfiguration
-
--(id)listLayoutProvider
-{
-    return [VIVALayoutManager sharedInstance];
-}
-
-%end
-
-%hook SBRootFolderController
+@hook SBRootFolderControllerConfiguration
 
 -(id)listLayoutProvider
 {
     return [VIVALayoutManager sharedInstance];
 }
 
+@end
 
-%end
+@hook SBRootFolderController
+
+-(id)listLayoutProvider
+{
+    return [VIVALayoutManager sharedInstance];
+}
+
+
+@end
 
 @interface SBFolder : NSObject
 @end
@@ -78,7 +78,7 @@ NSInteger widgetWidthSlidein(NSInteger size, NSInteger cols)
     return size;
 }
 
-%hook SBRootFolder 
+@hook SBRootFolder 
 
 -(struct SBHIconGridSize)listGridSize
 {
@@ -102,7 +102,7 @@ NSInteger widgetWidthSlidein(NSInteger size, NSInteger cols)
     return size;
 }
 
-%end
+@end
 
 
 static void *observer = NULL;
@@ -163,7 +163,8 @@ static void preferencesChanged()
 }
 #pragma mark ctor
 
-%ctor
+__attribute__((constructor))
+void vivaEntry()
 {
     preferencesChanged();
 

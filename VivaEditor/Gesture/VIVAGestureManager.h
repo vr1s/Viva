@@ -2,9 +2,7 @@
 // Created by vrisk/a on 6/24/21.
 //
 
-@import Foundation;
-@import UIKit;
-#import <objc/NSObject.h>
+#include <UIKit/UIKit.h>
 
 @class VIVAHitboxView;
 @class VIVAHitboxWindow;

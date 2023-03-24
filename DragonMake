@@ -19,8 +19,11 @@ Viva:
         - arm64
         - arm64e
     targetvers: 13.0
-    cinclude: -F./frameworks/ -I$dragondir/include -I$dragondir/vendor/include -I$dragondir/include/_fallback -I$DRAGONDIR/headers/ -I$pwd
-    cflags: -includePrefix.h -F./layout/Library/Application\ Support/Viva.bundle/ -w -F~/SDK/PrivateFrameworks
+    sysroot: /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/
+    cc: /Users/serket/src/apple-llvm/llvm/cmake-build-debug/bin/clang
+    cxx: /Users/serket/src/apple-llvm/llvm/cmake-build-debug/bin/clang++
+    cinclude: -F./frameworks/ -I$dragondir/include -I$dragondir/vendor/include -I$dragondir/include/_fallback -I$DRAGONDIR/headers/ -I$pwd -F/Users/serket/.dragon/sdks/iPhoneOS.sdk/System/Library/Frameworks/ -Xlinker -F/Users/serket/.dragon/sdks/iPhoneOS.sdk/System/Library/Frameworks/
+    cflags: -includePrefix.h -F./layout/Library/Application\ Support/Viva.bundle/ -w -F~/SDK/PrivateFrameworks -I/Users/serket/.dragon/sdks/iPhoneOS.sdk/usr/include
     include:
         - headers/UIKit-Private
         - include/
@@ -40,19 +43,26 @@ Viva:
     wild_recurse: Yes
     ldflags: "-ObjC"
     files:
-        - "VivaHooks/**/*.xm"
-        - Viva.xm
+        - "VivaHooks/**/*.m"
+        - Viva.m
         - "VivaEditor/**/*.m"
         - "VivaEditor/**/*.mm"
     libs:
-        - mobilegestalt
+        - objc
     frameworks:
         - AVFoundation
         - Accelerate
+        - QuartzCore
+        - CoreImage
         - CoreMedia
+        - CoreGraphics
+        - UIKit
+        - Foundation
+        - AudioToolbox
         - IOKit
         - MobileCoreServices
         - WebKit
+    modulesinternal: ""
 
 VivaPrefs:
     dir: VivaPrefs

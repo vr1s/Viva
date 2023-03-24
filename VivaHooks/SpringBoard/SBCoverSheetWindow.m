@@ -6,14 +6,14 @@
 #include "VIVAManager.h"
 
 
-%hook SBCoverSheetWindow
+@hook SBCoverSheetWindow
 
 // This is the lock screen // drag down thing
 // Pulling it down will disable the editor view
 
 - (BOOL)becomeFirstResponder 
 {
-    BOOL x = %orig;
+    BOOL x = @orig();
 
     if ([(SpringBoard*)[UIApplication sharedApplication] isShowingHomescreen] && [VIVAManager sharedInstance]._rtEditingEnabled)
     {
@@ -24,4 +24,4 @@
     return x;
 }
 
-%end
+@end

@@ -6,7 +6,7 @@ typedef struct SBIconCoordinate {
     NSInteger row;
 } SBIconCoordinate;
 
-%hook SBIconListView
+@hook SBIconListView
 
 
 -(BOOL)automaticallyAdjustsLayoutMetricsToFit
@@ -14,4 +14,4 @@ typedef struct SBIconCoordinate {
     return NO;
 }
 
-%end
+@end

@@ -2,7 +2,7 @@
 
 #include "VIVAConfigurationManager.h"
 
-%hook SBIconController
+@hook SBIconController
 
 -(BOOL)iconManager:(id)arg1 allowsBadgingForIconLocation:(NSString *)location
 {
@@ -20,7 +20,7 @@
             return NO;
         }
     }
-    return %orig(arg1, location);
+    return @orig(arg1, location);
 }
 
-%end
+@end

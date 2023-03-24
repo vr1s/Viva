@@ -3,7 +3,7 @@
 
 #include "VivaConfigurationManager.h"
 
-%hook SBHIconManager
+@hook SBHIconManager
 
 -(BOOL)iconViewDisplaysLabel:(SBIconView*)icon 
 {
@@ -24,7 +24,7 @@
         }
     }
 
-    return %orig(icon);
+    return @orig(icon);
 }
 
 -(NSUInteger)iconModel:(id)arg0 maxRowCountForListInRootFolderWithInterfaceOrientation:(NSInteger)arg1
@@ -32,4 +32,4 @@
     return [VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutConfiguration.iconGridSize.rows;
 }
 
-%end
+@end

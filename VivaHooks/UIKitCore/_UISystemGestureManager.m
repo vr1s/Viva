@@ -1,16 +1,14 @@
-
-
 #include "VIVAGestureManager.h"
 
-%hook _UISystemGestureManager 
+@hook _UISystemGestureManager 
 
 -(_UISystemGestureManager*)init 
 {
-    id o = %orig;
+    id o = @orig();
     
     [[VIVAGestureManager sharedInstance] insertGestureRecognizers:self];
 
     return o;
 }
 
-%end
+@end

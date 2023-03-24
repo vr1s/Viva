@@ -4,13 +4,13 @@
 #include "VivaConfigurationManager.h"
 
 @interface SBIconView (VIVA)
+@new
 -(void)__VIVA_ADDED_rescale; 
 @end
 
-%hook SBIconView
+@hook SBIconView
 
 
-%new 
 -(void)__VIVA_ADDED_rescale 
 {
     //if ([self isFolderIcon])
@@ -30,30 +30,30 @@
 }
 
 - (void)_updateIconImageViewAnimated:(BOOL)arg0 {
-	%orig;
+	@orig(arg0);
 	[self __VIVA_ADDED_rescale];
 }
 
 - (void)setIconContentScale:(CGFloat)arg0 {
-	%orig;
+	@orig(arg0);
 	[self __VIVA_ADDED_rescale];
 }
 
 -(id)initWithConfigurationOptions:(NSUInteger)arg0 
 {
-    id original = %orig;
+    id original = @orig(arg0);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(__VIVA_ADDED_rescale) name:@"VIVAUpdateIconScale" object:nil];
     return original;
 }
 -(id)initWithConfigurationOptions:(NSUInteger)arg0 listLayoutProvider:(id)arg1 
 {
-    id original = %orig;
+    id original = @orig(arg0, arg1);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(__VIVA_ADDED_rescale) name:@"VIVAUpdateIconScale" object:nil];
     return original;
 }
 -(id)initWithFrame:(struct CGRect )arg0 
 {
-    id original = %orig;
+    id original = @orig(arg0);
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(__VIVA_ADDED_rescale) name:@"VIVAUpdateIconScale" object:nil];
     return original;
 }
@@ -65,7 +65,7 @@
 
     if ([self isKindOfClass:[objc_getClass("_SBHLibraryPodIconView") class]] )
     {
-        %orig(allowed);
+        @orig(allowed);
         return;
     }
 
@@ -73,11 +73,11 @@
     {
         if ([VIVAConfigurationManager.sharedInstance.currentConfiguration pageConfigurations][@"SBIconLocationRoot"].layoutOptions.hideLabels)
         {
-            %orig(NO);
+            @orig(NO);
             return;
         }
     }
-    %orig(allowed);
+    @orig(allowed);
 }
 
-%end
+@end

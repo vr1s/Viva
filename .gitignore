@@ -17,3 +17,4 @@ packages/
 
 # Repo assets
 repo/
+.cache/

@@ -1,4 +1,3 @@
-
 #include <UIKit/UIKit.h>
 
 #include "VIVAUIManager.h"
@@ -6,11 +5,11 @@
 @interface PBUIPosterViewController : UIViewController
 @end
 
-%hook PBUIPosterViewController 
+@hook PBUIPosterViewController 
 
 -(void)scene:(id)arg1 clientDidConnect:(id)arg2
 {
-    %orig;
+    @orig(arg1, arg2);
 
     // 
     // With iOS 16, Wallpapers are now rendered in another process
@@ -27,4 +26,4 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:@"CreateBackgroundObject" object:nil];
 }
 
-%end
+@end

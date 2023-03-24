@@ -3,9 +3,16 @@
 #include "VIVAUIManager.h"
 #include "UIRootSceneWindow.h"
 
+@interface UIRootSceneWindow ()
+
+@new 
+- (void)recieveNotification:(NSNotification *)notification;
+
+@end
+
 #pragma mark Dynamic Window Background
 
-%hook UIRootSceneWindow
+@hook UIRootSceneWindow
 
 //
 // iOS 13-16 - Dynamic editor background
@@ -14,17 +21,16 @@
 
 - (id)initWithDisplayConfiguration:(id)arg
 {
-    id o = %orig(arg);
+    id o = @orig(arg);
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(recieveNotification:) name:@"CreateBackgroundObject" object:nil];
 
     return o;
 }
 
-%new
 - (void)recieveNotification:(NSNotification *)notification
 {
     self.backgroundColor = [UIColor colorWithPatternImage:[VIVAUIManager sharedInstance].blurredAndDarkenedWallpaper];
 }
 
-%end
+@end
